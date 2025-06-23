@@ -24,8 +24,8 @@ This project aims to identify early warning signs of cefiderocol resistance in m
 
 # Methodology
 
-Phase 1 (Setup & EDA): Standardize MIC units, perform exploratory data analysis (EDA) to study trends by year, region, and species.
-Phase 2 (Model Development): Train classification models on SIDERO-WT (2014–2018) and test on 2019 data, evaluating with AUC, precision, and recall.
-Phase 3 (Phenotypic Signatures): Use clustering (k-means, hierarchical) and PCA to identify resistance patterns.
-Phase 4 (Generalization): Apply models to ATLAS to map resistance risks globally.
-Phase 5 (Deliverables): Create a Streamlit dashboard, technical report, and presentation.
+- Phase 1 (Setup & EDA): Standardize MIC units, perform exploratory data analysis (EDA) to study trends by year, region, and species.
+- Phase 2 (Model Development): Train classification models on SIDERO-WT (2014–2018) and test on 2019 data, evaluating with AUC, precision, and recall.
+- Phase 3 (Phenotypic Signatures): Use clustering (k-means, hierarchical) and PCA to identify resistance patterns.
+- Phase 4 (Generalization): Apply models to ATLAS to map resistance risks globally.
+- Phase 5 (Deliverables): Create a Streamlit dashboard, technical report, and presentation.
