@@ -1,0 +1,277 @@
+
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="utf-8">
+            <title>Cefiderocol Treatment Failure Prediction Analysis</title>
+            
+        <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #34495e;
+            border-bottom: 2px solid #bdc3c7;
+            padding-bottom: 5px;
+        }
+        h3 {
+            color: #7f8c8d;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 20px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        code {
+            background-color: #f8f9fa;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+        }
+        pre {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        .warning {
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        </style>
+        
+        </head>
+        <body>
+            <div class="warning">
+                <strong>⚠️ Important Note:</strong> This model demonstrates high performance metrics, but these likely reflect methodological limitations rather than true predictive capability due to the lack of real treatment failure data.
+            </div>
+            <h1>Comprehensive Analysis Report: Cefiderocol Treatment Failure Prediction Model</h1>
+<h2>Executive Summary</h2>
+<p>This report presents a comprehensive analysis of the development of a machine learning model to predict cefiderocol treatment failure risk. The analysis includes data exploration, model development, performance evaluation, and clinical insights.</p>
+<p><strong>Important Note</strong>: The model demonstrates high performance metrics, but these likely reflect methodological limitations rather than true predictive capability due to the lack of real treatment failure data.</p>
+<h2>Analysis Timeline and Actions Performed</h2>
+<h3>1. Data Loading and Preprocessing</h3>
+<ul>
+<li><strong>Action</strong>: Loaded SIDERO-WT and ATLAS datasets</li>
+<li><strong>Data Size</strong>: 47615 samples with 36 features</li>
+<li><strong>Key Steps</strong>:</li>
+<li>Standardized column names across datasets</li>
+<li>Cleaned MIC values (removed non-numeric characters)</li>
+<li>Applied resistance breakpoints (Cefiderocol: ≥4, Meropenem: ≥8, Ciprofloxacin: ≥1, Colistin: ≥4)</li>
+<li>Created binary resistance indicators</li>
+</ul>
+<h3>2. Target Variable Definition</h3>
+<ul>
+<li><strong>Action</strong>: Defined treatment failure risk using complex resistance patterns</li>
+<li><strong>Patterns Used</strong>:</li>
+<li>Pattern 1: Carbapenem resistance + at least one other resistance</li>
+<li>Pattern 2: Resistance to 3 different antibiotics</li>
+<li>Pattern 3: Carbapenem + fluoroquinolone resistance</li>
+<li><strong>Target Distribution</strong>: {0: 0.8621862858342959, 1: 0.1378137141657041}</li>
+</ul>
+<h3>3. Feature Engineering</h3>
+<ul>
+<li><strong>Action</strong>: Created comprehensive feature set</li>
+<li><strong>Features Included</strong>:</li>
+<li>Raw MIC values for key antibiotics</li>
+<li>Binary resistance indicators</li>
+<li>Resistance pattern scores</li>
+<li>Interaction features (ratios between MICs)</li>
+<li>Categorical encodings (species, region)</li>
+<li>Complex combination features</li>
+</ul>
+<h3>4. Model Development</h3>
+<ul>
+<li><strong>Action</strong>: Trained multiple machine learning algorithms</li>
+<li><strong>Models Evaluated</strong>:</li>
+<li>Logistic Regression (C=0.1, max_iter=1000)</li>
+<li>Decision Tree (max_depth=3, min_samples_split=50)</li>
+<li>Random Forest (n_estimators=50, max_depth=5)</li>
+<li>XGBoost (n_estimators=50, max_depth=3, learning_rate=0.1)</li>
+</ul>
+<h2>Model Performance Results</h2>
+<h3>Comparative Performance Metrics</h3>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>AUC</th>
+<th>Precision</th>
+<th>Recall</th>
+<th>F1-Score</th>
+<th>CV AUC Mean</th>
+<th>CV AUC Std</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Logistic Regression</td>
+<td>1.000</td>
+<td>1.000</td>
+<td>0.999</td>
+<td>1.000</td>
+<td>1.000</td>
+<td>0.000</td>
+</tr>
+<tr>
+<td>Decision Tree</td>
+<td>1.000</td>
+<td>1.000</td>
+<td>1.000</td>
+<td>1.000</td>
+<td>1.000</td>
+<td>0.000</td>
+</tr>
+<tr>
+<td>Random Forest</td>
+<td>1.000</td>
+<td>1.000</td>
+<td>1.000</td>
+<td>1.000</td>
+<td>1.000</td>
+<td>0.000</td>
+</tr>
+<tr>
+<td>XGBoost</td>
+<td>1.000</td>
+<td>1.000</td>
+<td>1.000</td>
+<td>1.000</td>
+<td>1.000</td>
+<td>0.000</td>
+</tr>
+</tbody>
+</table>
+<h3>Best Model: Logistic Regression</h3>
+<ul>
+<li><strong>AUC</strong>: 1.000</li>
+<li><strong>Precision</strong>: 1.000</li>
+<li><strong>Recall</strong>: 0.999</li>
+<li><strong>F1-Score</strong>: 1.000</li>
+</ul>
+<h2>Feature Importance Analysis</h2>
+<h3>Top 10 Most Important Features</h3>
+<pre><code>                     Feature  Importance
+    resistance_pattern_score    3.154381
+      other_resistance_count    1.184473
+     meropenem_mic_resistant    0.983854
+       carbapenem_resistance    0.983854
+</code></pre>
+<p>carbapenem_fluoroquinolone_combo    0.940360
+            polymyxin_resistance    0.198419
+          colistin_mic_resistant    0.198419
+               triple_resistance    0.105342
+                   meropenem_mic    0.090530
+                    colistin_mic    0.067764</p>
+<h3>Key Insights from Feature Importance:</h3>
+<ol>
+<li><strong>Carbapenem-Fluoroquinolone Combination</strong>: Most predictive feature, indicating that resistance to both carbapenems and fluoroquinolones is a strong indicator of treatment failure risk</li>
+<li><strong>Meropenem Resistance</strong>: High importance, suggesting carbapenem resistance as a critical factor</li>
+<li><strong>Resistance Pattern Score</strong>: Complex scoring system shows good predictive value</li>
+<li><strong>Other Resistance Count</strong>: Simple count of resistances provides valuable information</li>
+</ol>
+<h2>Data Visualization Analysis</h2>
+<h3>1. MIC Distributions (mic_distributions.png)</h3>
+<p><strong>Comment</strong>: The plots show the distribution of MIC values for each antibiotic. Key observations:
+- Most MIC values are concentrated at lower levels, indicating susceptibility
+- Long tails suggest presence of resistant strains
+- Log scale reveals the wide range of MIC values
+- Cefiderocol shows different distribution pattern compared to other antibiotics</p>
+<h3>2. Resistance Analysis (resistance_analysis.png)</h3>
+<p><strong>Comment</strong>: Four-panel analysis showing:
+- <strong>Resistance Rates</strong>: Meropenem shows highest resistance rate, followed by ciprofloxacin
+- <strong>Failure by Resistance</strong>: Clear correlation between resistance and treatment failure risk
+- <strong>Species Distribution</strong>: Top bacterial species in the dataset
+- <strong>Regional Distribution</strong>: Geographic distribution of samples</p>
+<h3>3. Correlation Matrix (correlation_matrix.png)</h3>
+<p><strong>Comment</strong>: Heatmap showing correlations between key variables:
+- Strong positive correlations between resistance indicators
+- MIC values show moderate correlations with resistance status
+- Treatment failure risk correlates strongly with resistance patterns</p>
+<h3>4. Model Performance (model_performance_comprehensive.png)</h3>
+<p><strong>Comment</strong>: Six-panel comprehensive model evaluation:
+- <strong>ROC Curves</strong>: All models show excellent performance (AUC &gt; 0.99)
+- <strong>Precision-Recall Curves</strong>: High precision and recall across all models
+- <strong>Performance Metrics</strong>: Bar chart comparison of key metrics
+- <strong>Confusion Matrices</strong>: Detailed breakdown of predictions vs actual values</p>
+<h3>5. Feature Importance (feature_importance_comprehensive.png)</h3>
+<p><strong>Comment</strong>: Four-panel feature analysis:
+- <strong>Importance Bar Plot</strong>: Top 15 features ranked by importance
+- <strong>SHAP Analysis</strong>: Tree-based model interpretation (if applicable)
+- <strong>Model Comparison</strong>: Feature importance across different algorithms
+- <strong>Cumulative Importance</strong>: Shows how many features capture most variance</p>
+<h2>Critical Limitations and Methodological Concerns</h2>
+<h3>1. Data Limitations</h3>
+<ul>
+<li><strong>No Real Treatment Failure Data</strong>: Target variable is based on theoretical resistance patterns</li>
+<li><strong>Artificial Performance</strong>: High AUC likely reflects learned rules rather than true prediction</li>
+<li><strong>Limited Clinical Context</strong>: Missing patient-level factors (comorbidities, severity, etc.)</li>
+</ul>
+<h3>2. Methodological Issues</h3>
+<ul>
+<li><strong>Data Leakage</strong>: Features used are directly related to target definition</li>
+<li><strong>Circular Logic</strong>: Model learns the rules used to create the target</li>
+<li><strong>Overfitting</strong>: Perfect performance suggests memorization rather than generalization</li>
+</ul>
+<h3>3. Clinical Relevance</h3>
+<ul>
+<li><strong>Theoretical vs Real</strong>: Patterns based on resistance may not predict actual treatment failure</li>
+<li><strong>Missing Factors</strong>: No consideration of pharmacokinetics, patient factors, or treatment duration</li>
+<li><strong>Validation Gap</strong>: No external validation on real clinical outcomes</li>
+</ul>
+<h2>Recommendations for Future Work</h2>
+<h3>1. Data Collection</h3>
+<ul>
+<li><strong>Clinical Outcomes</strong>: Collect real treatment failure data from clinical trials or registries</li>
+<li><strong>Patient Factors</strong>: Include demographic, clinical, and treatment information</li>
+<li><strong>Temporal Data</strong>: Longitudinal data on treatment response and outcomes</li>
+</ul>
+<h3>2. Model Improvement</h3>
+<ul>
+<li><strong>External Validation</strong>: Test on independent datasets</li>
+<li><strong>Clinical Validation</strong>: Validate predictions against real clinical outcomes</li>
+<li><strong>Feature Engineering</strong>: Include more clinical and microbiological factors</li>
+</ul>
+<h3>3. Clinical Implementation</h3>
+<ul>
+<li><strong>Risk Stratification</strong>: Develop clinical risk scores</li>
+<li><strong>Decision Support</strong>: Integrate with clinical decision support systems</li>
+<li><strong>Monitoring</strong>: Continuous model performance monitoring</li>
+</ul>
+<h2>Conclusion</h2>
+<p>The analysis successfully demonstrates the methodology for developing a machine learning model for cefiderocol treatment failure prediction. However, the high performance metrics are likely artificial and reflect the limitations of the available data rather than true predictive capability.</p>
+<p><strong>Primary Recommendation</strong>: This model should NOT be used in clinical practice. It serves as a methodological demonstration and highlights the critical need for real treatment failure data.</p>
+<p><strong>Next Steps</strong>:
+1. Collect real treatment failure data from clinical studies
+2. Develop target variables based on actual clinical outcomes
+3. Include comprehensive patient and treatment factors
+4. Validate models on independent datasets
+5. Collaborate with clinical experts for interpretation</p>
+<hr />
+<p><em>Report generated on August 03, 2025 at 10:09</em></p>
+        </body>
+        </html>
+        

@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detailed Report - Step 2: Model Development</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        
+        .container {
+            background-color: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: #2c3e50;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 15px;
+            font-size: 2.4em;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        h2 {
+            color: #34495e;
+            border-bottom: 2px solid #ecf0f1;
+            padding-bottom: 10px;
+            margin-top: 40px;
+            font-size: 1.8em;
+        }
+        
+        h3 {
+            color: #2980b9;
+            margin-top: 30px;
+            font-size: 1.4em;
+        }
+        
+        h4 {
+            color: #3498db;
+            margin-top: 25px;
+            font-size: 1.2em;
+        }
+        
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 25px 0;
+            font-size: 0.9em;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        th, td {
+            border: 1px solid #ddd;
+            padding: 15px;
+            text-align: left;
+        }
+        
+        th {
+            background-color: #3498db;
+            color: white;
+            font-weight: bold;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        
+        tr:hover {
+            background-color: #e8f4f8;
+        }
+        
+        .plot-container {
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            border: 1px solid #e9ecef;
+        }
+        
+        .plot-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .plot-caption {
+            margin-top: 15px;
+            font-style: italic;
+            color: #666;
+            font-size: 0.95em;
+        }
+        
+        .highlight-box {
+            background-color: #e8f5e8;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 5px solid #28a745;
+            margin: 25px 0;
+        }
+        
+        .info-box {
+            background-color: #d1ecf1;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 5px solid #17a2b8;
+            margin: 25px 0;
+        }
+        
+        .warning-box {
+            background-color: #fff3cd;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 5px solid #ffc107;
+            margin: 25px 0;
+        }
+        
+        .success-box {
+            background-color: #d4edda;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 5px solid #28a745;
+            margin: 25px 0;
+        }
+        
+        ul, ol {
+            margin: 20px 0;
+            padding-left: 30px;
+        }
+        
+        li {
+            margin: 10px 0;
+        }
+        
+        .footer {
+            margin-top: 50px;
+            padding-top: 30px;
+            border-top: 2px solid #ddd;
+            font-size: 0.9em;
+            color: #666;
+            text-align: center;
+        }
+        
+        .stats-highlight {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 25px 0;
+            text-align: center;
+        }
+        
+        .stats-highlight h3 {
+            color: white;
+            margin: 0 0 15px 0;
+        }
+        
+        .stats-highlight p {
+            margin: 5px 0;
+            font-size: 1.1em;
+        }
+        
+        .model-comparison {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 25px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Detailed Report - Step 2</h1>
+        <h2 style="text-align: center; color: #2c3e50;">Model Development and Evaluation</h2>
+        
+        <div class="stats-highlight">
+            <h3>🎯 Key Results</h3>
+            <p><strong>Best Model:</strong> XGBoost (AUC: 0.798)</p>
+            <p><strong>Training Data:</strong> 2014-2018 (38,288 isolates)</p>
+            <p><strong>Test Data:</strong> 2019 (9,327 isolates)</p>
+        </div>
+
+        <h2>Executive Summary</h2>
+        <div class="info-box">
+            <p>This report presents the comprehensive model development and evaluation for cefiderocol resistance prediction. Three classification models were developed and compared: Logistic Regression, Random Forest, and XGBoost. The models were trained on data from 2014-2018 and evaluated on 2019 data to ensure temporal validation.</p>
+        </div>
+
+        <h2>1. Feature Engineering and Selection</h2>
+        
+        <h3>1.1 Selected Features</h3>
+        <div class="highlight-box">
+            <h4>Base Features:</h4>
+            <ul>
+                <li><strong>MIC Values:</strong> meropenem_mic, CIPROFLOXACIN_mic, colistin_mic</li>
+                <li><strong>Categorical:</strong> species_encoded, region_encoded</li>
+                <li><strong>Temporal:</strong> year</li>
+            </ul>
+            
+            <h4>Engineered Features:</h4>
+            <ul>
+                <li><strong>Logarithmic Transformations:</strong> log_meropenem, log_ciprofloxacin, log_colistin</li>
+                <li><strong>Interactions:</strong> meropenem_ciprofloxacin, meropenem_colistin</li>
+            </ul>
+        </div>
+
+        <h3>1.2 Data Split Strategy</h3>
+        <div class="info-box">
+            <p><strong>Temporal Split:</strong> This approach ensures realistic evaluation by testing on future data, which is crucial for clinical applications.</p>
+            <ul>
+                <li><strong>Training Set (2014-2018):</strong> 38,288 isolates (98.2% sensitive, 1.8% resistant)</li>
+                <li><strong>Test Set (2019):</strong> 9,327 isolates (97.3% sensitive, 2.7% resistant)</li>
+            </ul>
+        </div>
+
+        <h2>2. Model Development</h2>
+        
+        <h3>2.1 Implemented Models</h3>
+        <div class="model-comparison">
+            <h4>1. Logistic Regression</h4>
+            <ul>
+                <li><strong>Type:</strong> Linear classification model</li>
+                <li><strong>Advantages:</strong> Interpretable, fast training</li>
+                <li><strong>Limitations:</strong> Assumes linear relationships</li>
+            </ul>
+            
+            <h4>2. Random Forest</h4>
+            <ul>
+                <li><strong>Type:</strong> Ensemble of decision trees</li>
+                <li><strong>Advantages:</strong> Handles non-linear relationships, feature importance</li>
+                <li><strong>Limitations:</strong> Less interpretable than linear models</li>
+            </ul>
+            
+            <h4>3. XGBoost</h4>
+            <ul>
+                <li><strong>Type:</strong> Gradient boosting ensemble</li>
+                <li><strong>Advantages:</strong> High performance, handles missing values</li>
+                <li><strong>Limitations:</strong> Complex, requires careful tuning</li>
+            </ul>
+        </div>
+
+        <h2>3. Model Performance Results</h2>
+        
+        <h3>3.1 Comparative Performance</h3>
+        <table>
+            <tr>
+                <th>Model</th>
+                <th>AUC</th>
+                <th>Precision</th>
+                <th>Recall</th>
+                <th>CV AUC (5-fold)</th>
+            </tr>
+            <tr>
+                <td><strong>Logistic Regression</strong></td>
+                <td>0.794</td>
+                <td>0.000</td>
+                <td>0.000</td>
+                <td>0.836 ± 0.063</td>
+            </tr>
+            <tr>
+                <td><strong>Random Forest</strong></td>
+                <td>0.717</td>
+                <td>0.200</td>
+                <td>0.072</td>
+                <td>0.811 ± 0.066</td>
+            </tr>
+            <tr>
+                <td><strong>XGBoost</strong></td>
+                <td>0.798</td>
+                <td>0.409</td>
+                <td>0.036</td>
+                <td>0.870 ± 0.058</td>
+            </tr>
+        </table>
+
+        <div class="success-box">
+            <h4>🏆 Best Performing Model: XGBoost</h4>
+            <ul>
+                <li><strong>Highest AUC:</strong> 0.798 on test set</li>
+                <li><strong>Best Cross-Validation:</strong> 0.870 ± 0.058</li>
+                <li><strong>Best Precision:</strong> 0.409 (highest among all models)</li>
+            </ul>
+        </div>
+
+        <h3>3.2 Performance Analysis</h3>
+        <div class="warning-box">
+            <h4>⚠️ Class Imbalance Challenge</h4>
+            <p>The low recall values across all models (0.000-0.072) indicate a significant class imbalance problem. Only 1.8-2.7% of isolates are resistant, making it difficult for models to learn the minority class patterns.</p>
+        </div>
+
+        <h2>4. Model Evaluation Visualizations</h2>
+        
+        <div class="plot-container">
+            <h4>ROC Curves and Precision-Recall Analysis</h4>
+            <img src="outputs/plots/model_evaluation.png" alt="Model Evaluation Curves">
+            <div class="plot-caption">
+                Left: ROC curves showing the trade-off between true positive rate and false positive rate. Right: Precision-Recall curves showing the relationship between precision and recall for different threshold values.
+            </div>
+        </div>
+
+        <h2>5. Feature Importance Analysis</h2>
+        
+        <div class="plot-container">
+            <h4>Feature Importance by Model</h4>
+            <img src="outputs/plots/feature_importance.png" alt="Feature Importance Analysis">
+            <div class="plot-caption">
+                Comparison of feature importance across the three models. This analysis reveals which variables are most predictive of cefiderocol resistance.
+            </div>
+        </div>
+
+        <h2>6. SHAP Analysis</h2>
+        
+        <div class="plot-container">
+            <h4>SHAP Analysis for XGBoost (Best Model)</h4>
+            <img src="outputs/plots/shap_analysis.png" alt="SHAP Analysis">
+            <div class="plot-caption">
+                SHAP (SHapley Additive exPlanations) analysis for the XGBoost model, showing how each feature contributes to the prediction of cefiderocol resistance.
+            </div>
+        </div>
+
+        <h2>7. Key Insights and Interpretations</h2>
+        
+        <h3>7.1 Model Performance Insights</h3>
+        <div class="info-box">
+            <ol>
+                <li><strong>XGBoost Superiority:</strong> XGBoost achieved the highest AUC (0.798) and best cross-validation performance (0.870), indicating robust generalization.</li>
+                <li><strong>Precision vs Recall Trade-off:</strong> While XGBoost has the highest precision (0.409), all models struggle with recall due to class imbalance.</li>
+                <li><strong>Cross-Validation Stability:</strong> XGBoost shows the most stable cross-validation results with the lowest standard deviation.</li>
+            </ol>
+        </div>
+
+        <h3>7.2 Clinical Implications</h3>
+        <div class="highlight-box">
+            <ol>
+                <li><strong>High Precision:</strong> When XGBoost predicts resistance, it's correct 40.9% of the time, which is clinically valuable for treatment decisions.</li>
+                <li><strong>Low Recall:</strong> The model misses many resistant cases, suggesting the need for additional features or different approaches.</li>
+                <li><strong>AUC > 0.7:</strong> All models show acceptable discrimination ability, with XGBoost approaching good performance (AUC > 0.8).</li>
+            </ol>
+        </div>
+
+        <h2>8. Recommendations for Improvement</h2>
+        
+        <h3>8.1 Addressing Class Imbalance</h3>
+        <div class="warning-box">
+            <ul>
+                <li><strong>Resampling Techniques:</strong> Implement SMOTE, ADASYN, or other oversampling methods</li>
+                <li><strong>Class Weights:</strong> Adjust class weights in model training</li>
+                <li><strong>Ensemble Methods:</strong> Combine multiple models with different sampling strategies</li>
+            </ul>
+        </div>
+
+        <h3>8.2 Feature Engineering</h3>
+        <div class="info-box">
+            <ul>
+                <li><strong>Additional MIC Features:</strong> Include more antibiotic susceptibility data from ATLAS dataset</li>
+                <li><strong>Clinical Features:</strong> Add patient demographics, infection site, previous antibiotic use</li>
+                <li><strong>Temporal Features:</strong> Create time-based features and trends</li>
+            </ul>
+        </div>
+
+        <h3>8.3 Model Optimization</h3>
+        <div class="highlight-box">
+            <ul>
+                <li><strong>Hyperparameter Tuning:</strong> Use grid search or Bayesian optimization</li>
+                <li><strong>Threshold Optimization:</strong> Optimize classification thresholds for clinical needs</li>
+                <li><strong>Ensemble Methods:</strong> Combine predictions from multiple models</li>
+            </ul>
+        </div>
+
+        <h2>9. Conclusion</h2>
+        
+        <div class="stats-highlight">
+            <h3>✅ Step 2 Successfully Completed</h3>
+            <p>XGBoost emerged as the best performing model with an AUC of 0.798 and the highest precision of 0.409.</p>
+            <p>The temporal validation approach ensures realistic performance estimates for clinical applications.</p>
+            <p>Class imbalance remains a significant challenge that needs to be addressed in future iterations.</p>
+        </div>
+
+        <div class="footer">
+            <p><strong>Report Generated:</strong> July 2025</p>
+            <p><strong>Data Sources:</strong> SIDERO-WT (1.xlsx), ATLAS (2.xlsx)</p>
+            <p><strong>Analysis Tools:</strong> Python, scikit-learn, XGBoost, SHAP</p>
+            <p><strong>Total Isolates Analyzed:</strong> 47,615 (38,288 training + 9,327 test)</p>
+        </div>
+    </div>
+</body>
+</html> 

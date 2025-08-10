@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Step 2 Report: Model Development - Humanized Version</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.7;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        
+        .container {
+            background-color: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 0 25px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: #2c3e50;
+            border-bottom: 4px solid #3498db;
+            padding-bottom: 20px;
+            font-size: 2.6em;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        h2 {
+            color: #34495e;
+            border-bottom: 2px solid #ecf0f1;
+            padding-bottom: 12px;
+            margin-top: 40px;
+            font-size: 1.8em;
+        }
+        
+        h3 {
+            color: #2980b9;
+            margin-top: 30px;
+            font-size: 1.4em;
+        }
+        
+        h4 {
+            color: #3498db;
+            margin-top: 25px;
+            font-size: 1.2em;
+        }
+        
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 25px 0;
+            font-size: 0.95em;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        th, td {
+            border: 1px solid #ddd;
+            padding: 18px;
+            text-align: left;
+        }
+        
+        th {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            font-weight: bold;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        
+        tr:hover {
+            background-color: #e8f4f8;
+            transform: scale(1.01);
+            transition: all 0.2s ease;
+        }
+        
+        .plot-container {
+            text-align: center;
+            margin: 35px 0;
+            padding: 25px;
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border-radius: 12px;
+            border: 2px solid #dee2e6;
+        }
+        
+        .plot-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+        
+        .plot-caption {
+            margin-top: 20px;
+            font-style: italic;
+            color: #666;
+            font-size: 1em;
+            line-height: 1.5;
+        }
+        
+        .highlight-box {
+            background: linear-gradient(135deg, #e8f5e8, #d4edda);
+            padding: 25px;
+            border-radius: 12px;
+            border-left: 6px solid #28a745;
+            margin: 30px 0;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .info-box {
+            background: linear-gradient(135deg, #d1ecf1, #bee5eb);
+            padding: 25px;
+            border-radius: 12px;
+            border-left: 6px solid #17a2b8;
+            margin: 30px 0;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .warning-box {
+            background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+            padding: 25px;
+            border-radius: 12px;
+            border-left: 6px solid #ffc107;
+            margin: 30px 0;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .success-box {
+            background: linear-gradient(135deg, #d4edda, #c3e6cb);
+            padding: 25px;
+            border-radius: 12px;
+            border-left: 6px solid #28a745;
+            margin: 30px 0;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .model-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border: 2px solid #e9ecef;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .model-card h4 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+        
+        .pros-cons {
+            display: flex;
+            gap: 20px;
+            margin-top: 15px;
+        }
+        
+        .pros, .cons {
+            flex: 1;
+            padding: 15px;
+            border-radius: 8px;
+        }
+        
+        .pros {
+            background-color: #d4edda;
+            border-left: 4px solid #28a745;
+        }
+        
+        .cons {
+            background-color: #f8d7da;
+            border-left: 4px solid #dc3545;
+        }
+        
+        ul, ol {
+            margin: 20px 0;
+            padding-left: 30px;
+        }
+        
+        li {
+            margin: 12px 0;
+            line-height: 1.6;
+        }
+        
+        .footer {
+            margin-top: 60px;
+            padding-top: 40px;
+            border-top: 3px solid #ddd;
+            font-size: 0.9em;
+            color: #666;
+            text-align: center;
+        }
+        
+        .stats-highlight {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 30px 0;
+            text-align: center;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        }
+        
+        .stats-highlight h3 {
+            color: white;
+            margin: 0 0 20px 0;
+            font-size: 1.5em;
+        }
+        
+        .stats-highlight p {
+            margin: 8px 0;
+            font-size: 1.1em;
+        }
+        
+        .emoji {
+            font-size: 1.2em;
+            margin-right: 8px;
+        }
+        
+        .section-divider {
+            border: none;
+            height: 3px;
+            background: linear-gradient(90deg, #3498db, #2ecc71, #f39c12);
+            margin: 40px 0;
+            border-radius: 2px;
+        }
+        
+        .callout {
+            background: linear-gradient(135deg, #ffeaa7, #fab1a0);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 25px 0;
+            border-left: 5px solid #e17055;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎯 Step 2 Report: Model Development</h1>
+        <h2 style="text-align: center; color: #2c3e50;">Cefiderocol Resistance Prediction</h2>
+        
+        <div class="stats-highlight">
+            <h3>🏆 Our Main Results</h3>
+            <p><strong>Best Model:</strong> XGBoost (Performance: 79.8%)</p>
+            <p><strong>Training Data:</strong> 2014-2018 (38,288 bacteria)</p>
+            <p><strong>Test Data:</strong> 2019 (9,327 bacteria)</p>
+        </div>
+
+        <h2>🎯 Summary in Simple Terms</h2>
+        <div class="info-box">
+            <p>Imagine we're trying to predict whether a bacterium will be resistant to an antibiotic (cefiderocol) by looking at other information we have about that bacterium. That's exactly what we did in this step!</p>
+            
+            <p><strong>In brief:</strong></p>
+            <ul>
+                <li>We created 3 different "prediction machines"</li>
+                <li>The best one (XGBoost) has a success rate of 79.8%</li>
+                <li>We tested on 2019 data to see if our predictions work in the "real world"</li>
+            </ul>
+        </div>
+
+        <h2>📊 Our Detailed Results</h2>
+        
+        <table>
+            <tr>
+                <th>Model</th>
+                <th>Performance</th>
+                <th>Precision</th>
+                <th>Detection</th>
+            </tr>
+            <tr>
+                <td><strong>XGBoost</strong> (Best)</td>
+                <td>79.8%</td>
+                <td>40.9%</td>
+                <td>3.6%</td>
+            </tr>
+            <tr>
+                <td>Logistic Regression</td>
+                <td>79.4%</td>
+                <td>0%</td>
+                <td>0%</td>
+            </tr>
+            <tr>
+                <td>Random Forest</td>
+                <td>71.7%</td>
+                <td>20%</td>
+                <td>7.2%</td>
+            </tr>
+        </table>
+
+        <div class="callout">
+            <h4>💡 What do these numbers mean?</h4>
+            <ul>
+                <li><strong>Performance (AUC)</strong>: Model's ability to distinguish sensitive from resistant bacteria</li>
+                <li><strong>Precision</strong>: When the model says "resistant", how often is it right?</li>
+                <li><strong>Detection</strong>: Among all truly resistant bacteria, how many can the model identify?</li>
+            </ul>
+        </div>
+
+        <div class="section-divider"></div>
+
+        <h2>🔍 How We Proceeded</h2>
+        
+        <h3>1. The Data We Used</h3>
+        <div class="highlight-box">
+            <h4>📋 Basic information about each bacterium:</h4>
+            <ul>
+                <li>Its sensitivity to other antibiotics (meropenem, ciprofloxacin, colistin)</li>
+                <li>The type of bacterium (species)</li>
+                <li>Geographic region</li>
+                <li>Year of collection</li>
+            </ul>
+            
+            <h4>🔧 Information we created:</h4>
+            <ul>
+                <li>Mathematical transformations to better understand relationships</li>
+                <li>Interactions between different antibiotics</li>
+            </ul>
+        </div>
+
+        <h3>2. Our Testing Strategy</h3>
+        <div class="info-box">
+            <h4>🎓 Why test on 2019?</h4>
+            <p>Imagine learning to drive in 2014-2018, then testing your skills in 2019. This is more realistic than testing on the same learning data!</p>
+            
+            <ul>
+                <li><strong>Training</strong>: 2014-2018 (38,288 bacteria)</li>
+                <li><strong>Test</strong>: 2019 (9,327 bacteria)</li>
+            </ul>
+        </div>
+
+        <div class="section-divider"></div>
+
+        <h2>🤖 The Three "Prediction Machines"</h2>
+        
+        <div class="model-card">
+            <h4>1. Logistic Regression</h4>
+            <p><strong>Like a doctor who follows simple rules</strong></p>
+            <div class="pros-cons">
+                <div class="pros">
+                    <h5>✅ Advantages</h5>
+                    <ul>
+                        <li>Easy to understand</li>
+                        <li>Fast</li>
+                    </ul>
+                </div>
+                <div class="cons">
+                    <h5>❌ Limitations</h5>
+                    <ul>
+                        <li>May miss complex relationships</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="model-card">
+            <h4>2. Random Forest</h4>
+            <p><strong>Like a committee of experts who vote</strong></p>
+            <div class="pros-cons">
+                <div class="pros">
+                    <h5>✅ Advantages</h5>
+                    <ul>
+                        <li>Can capture complex relationships</li>
+                        <li>Provides explanations</li>
+                    </ul>
+                </div>
+                <div class="cons">
+                    <h5>❌ Limitations</h5>
+                    <ul>
+                        <li>Less easy to interpret</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="model-card">
+            <h4>3. XGBoost (Our Winner)</h4>
+            <p><strong>Like a brilliant student who learns from mistakes</strong></p>
+            <div class="pros-cons">
+                <div class="pros">
+                    <h5>✅ Advantages</h5>
+                    <ul>
+                        <li>Very performant</li>
+                        <li>Can handle missing data</li>
+                    </ul>
+                </div>
+                <div class="cons">
+                    <h5>❌ Limitations</h5>
+                    <ul>
+                        <li>More complex to understand</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-divider"></div>
+
+        <h2>📈 Visualizations of Our Results</h2>
+        
+        <div class="plot-container">
+            <h4>📊 Performance Curves</h4>
+            <img src="outputs/plots/model_evaluation.png" alt="Model Evaluation">
+            <div class="plot-caption">
+                These graphs show how our models compare. The higher the curve, the better the model.
+            </div>
+        </div>
+
+        <div class="plot-container">
+            <h4>🎯 Feature Importance</h4>
+            <img src="outputs/plots/feature_importance.png" alt="Feature Importance">
+            <div class="plot-caption">
+                This graph tells us which information is most important for predicting resistance.
+            </div>
+        </div>
+
+        <div class="plot-container">
+            <h4>🔍 SHAP Analysis (Explanations)</h4>
+            <img src="outputs/plots/shap_analysis.png" alt="SHAP Analysis">
+            <div class="plot-caption">
+                This analysis explains how each piece of information contributes to the prediction.
+            </div>
+        </div>
+
+        <div class="section-divider"></div>
+
+        <h2>💡 What We Learned</h2>
+        
+        <h3>The Good News</h3>
+        <div class="success-box">
+            <ol>
+                <li><strong>XGBoost is the best</strong>: It correctly predicts in 79.8% of cases</li>
+                <li><strong>When it says "resistant", it's often right</strong>: 40.9% precision</li>
+                <li><strong>Our models are stable</strong>: They work well even on new data</li>
+            </ol>
+        </div>
+
+        <h3>The Challenges to Address</h3>
+        <div class="warning-box">
+            <ol>
+                <li><strong>The imbalance problem</strong>: There are very few resistant bacteria (1.8-2.7%), making prediction difficult</li>
+                <li><strong>We miss many resistant cases</strong>: Models detect less than 10% of true resistant cases</li>
+                <li><strong>We need more information</strong>: Perhaps other data would help us</li>
+            </ol>
+        </div>
+
+        <div class="section-divider"></div>
+
+        <h2>🎯 Clinical Implications</h2>
+        
+        <h3>For Doctors</h3>
+        <div class="info-box">
+            <ul>
+                <li><strong>When the model says "resistant"</strong>: There's a 40.9% chance it's right</li>
+                <li><strong>When the model says "sensitive"</strong>: It's probably right (but it can be wrong)</li>
+                <li><strong>Stay cautious</strong>: The model doesn't replace laboratory tests</li>
+            </ul>
+        </div>
+
+        <h3>For Patients</h3>
+        <div class="highlight-box">
+            <ul>
+                <li><strong>It's a decision aid</strong>: It helps doctors make decisions</li>
+                <li><strong>More development needed</strong>: It's not perfect yet</li>
+                <li><strong>The future is promising</strong>: With more data, it could become very useful</li>
+            </ul>
+        </div>
+
+        <div class="section-divider"></div>
+
+        <h2>🚀 Recommendations for Improvement</h2>
+        
+        <h3>1. Handle the Imbalance</h3>
+        <div class="warning-box">
+            <p><strong>The problem</strong>: There are 50 times more sensitive than resistant bacteria</p>
+            <p><strong>Solutions:</strong></p>
+            <ul>
+                <li>Use resampling techniques</li>
+                <li>Give more weight to resistant cases</li>
+                <li>Combine multiple models</li>
+            </ul>
+        </div>
+
+        <h3>2. Add More Information</h3>
+        <div class="info-box">
+            <p><strong>What we could add:</strong></p>
+            <ul>
+                <li>More antibiotic data</li>
+                <li>Patient information</li>
+                <li>Treatment history</li>
+            </ul>
+        </div>
+
+        <h3>3. Optimize Models</h3>
+        <div class="highlight-box">
+            <p><strong>Possible improvements:</strong></p>
+            <ul>
+                <li>Adjust model parameters</li>
+                <li>Optimize decision thresholds</li>
+                <li>Create model ensembles</li>
+            </ul>
+        </div>
+
+        <div class="section-divider"></div>
+
+        <h2>🎉 Conclusion</h2>
+        
+        <div class="stats-highlight">
+            <h3>✅ What We Achieved</h3>
+            <p><strong>Created working models</strong>: XGBoost achieves 79.8% performance</p>
+            <p><strong>Realistic validation</strong>: Tested on future data (2019)</p>
+            <p><strong>Understood limitations</strong>: Identified challenges to address</p>
+        </div>
+
+        <div class="info-box">
+            <h3>🔄 What Remains to Be Done</h3>
+            <ul>
+                <li><strong>Improve detection</strong>: Be able to identify more resistant cases</li>
+                <li><strong>Integrate more data</strong>: Use all available information</li>
+                <li><strong>Clinical validation</strong>: Test in real hospitals</li>
+            </ul>
+        </div>
+
+        <div class="callout">
+            <h3>💝 Message of Hope</h3>
+            <p>Even though our models aren't perfect, they represent an important step toward predicting antibiotic resistance. With more data and improvements, they could one day help doctors save lives by choosing the right antibiotic from the start.</p>
+        </div>
+
+        <div class="section-divider"></div>
+
+        <h2>📋 Next Steps</h2>
+        
+        <div class="highlight-box">
+            <ol>
+                <li><strong>Improve models</strong>: Work on class imbalance</li>
+                <li><strong>Integrate more data</strong>: Use complete ATLAS dataset</li>
+                <li><strong>Optimize performance</strong>: Adjust parameters</li>
+                <li><strong>Clinical validation</strong>: Test in real conditions</li>
+            </ol>
+        </div>
+
+        <div class="footer">
+            <p><strong>Report Generated:</strong> July 2025</p>
+            <p><strong>Data Sources:</strong> SIDERO-WT (1.xlsx), ATLAS (2.xlsx)</p>
+            <p><strong>Analysis Tools:</strong> Python, scikit-learn, XGBoost, SHAP</p>
+            <p><strong>Total Isolates Analyzed:</strong> 47,615 (38,288 training + 9,327 test)</p>
+            <p><em>This report was designed to be accessible to everyone, from biologists to clinicians, to computer science researchers.</em></p>
+        </div>
+    </div>
+</body>
+</html> 

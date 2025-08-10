@@ -1,31 +1,221 @@
-# Anticipating Cefiderocol Resistance in MDR Pathogens
+# Vivli System - Antibiotic Decision Support Platform
 
 ## Overview
 
-This project aims to identify early warning signs of cefiderocol resistance in multidrug-resistant (MDR) Gram-negative bacteria, a critical last-resort antibiotic. By analyzing phenotypic patterns in antibiotic susceptibility, we seek to pinpoint geographic and pathogen-specific risks to guide antimicrobial stewardship.
+The Vivli system is a comprehensive antibiotic decision support platform that combines multiple prediction models to provide evidence-based antibiotic recommendations. The system uses machine learning to recommend antibiotics in optimal order of efficacy, with cefiderocol as the last resort option.
 
-## Datasets
+## 🏗️ Architecture
 
-- SIDERO-WT: Contains Minimum Inhibitory Concentration (MIC) data for cefiderocol and comparator antibiotics (e.g., meropenem, ciprofloxacin) across North America and Europe (2014–2019).
+The system follows a structured 4-step methodology:
 
-- ATLAS: Global MIC data for comparator antibiotics, used to generalize findings from SIDERO-WT to other regions.
+1. **Step 1**: Data Preparation and Exploration
+2. **Step 2**: Antibiotic Decision Tree Model Development
+3. **Step 3**: Phenotypic Signature Analysis and Clustering
+4. **Step 4**: Cefiderocol Use Prediction Model
 
-## Objectives
+## 📁 Project Structure
 
-- Explore and standardize MIC data across datasets.
+```
+Vivli/
+├── scripts/                    # Python scripts
+│   ├── antibiotic_decision_tree.py
+│   ├── step4_prediction.py
+│   ├── generate_english_antibiotic_report.py
+│   ├── convert_md_to_html.py
+│   └── ...
+├── docs/                       # Documentation
+│   ├── vivli_complete_methodology.md
+│   ├── vivli_complete_methodology.html
+│   ├── antibiotic_recommendation_system_details_english.md
+│   ├── last_prediction_model_details.md
+│   └── ...
+├── outputs/                    # Generated outputs
+│   ├── reports/               # PDF and HTML reports
+│   ├── plots/                 # Visualizations
+│   └── models/                # Trained models
+├── data/                      # Data files (not included in repo)
+│   ├── 1.xlsx                # SIDERO-WT Database
+│   └── 2.xlsx                # ATLAS Database
+└── README.md
+```
 
-- Develop machine learning models (Logistic Regression, Random Forest, XGBoost) to predict cefiderocol resistance.
+## 🚀 Quick Start
 
-- Cluster resistance profiles to define phenotypic "signatures."
+### Prerequisites
 
-- Generalize findings to the ATLAS dataset to identify high-risk regions and species.
+```bash
+pip install pandas numpy scikit-learn matplotlib seaborn xgboost shap reportlab markdown
+```
 
-- Build an interactive dashboard and deliver a technical report.
+### Running the System
 
-# Methodology
+1. **Antibiotic Decision Tree Model**:
+```bash
+cd scripts
+python antibiotic_decision_tree.py
+```
 
-- Phase 1 (Setup & EDA): Standardize MIC units, perform exploratory data analysis (EDA) to study trends by year, region, and species.
-- Phase 2 (Model Development): Train classification models on SIDERO-WT (2014–2018) and test on 2019 data, evaluating with AUC, precision, and recall.
-- Phase 3 (Phenotypic Signatures): Use clustering (k-means, hierarchical) and PCA to identify resistance patterns.
-- Phase 4 (Generalization): Apply models to ATLAS to map resistance risks globally.
-- Phase 5 (Deliverables): Create a Streamlit dashboard, technical report, and presentation.
+2. **Cefiderocol Prediction Model**:
+```bash
+cd scripts
+python step4_prediction.py
+```
+
+3. **Generate English Report**:
+```bash
+cd scripts
+python generate_english_antibiotic_report.py
+```
+
+## 📊 Models
+
+### 1. Antibiotic Decision Tree Model
+- **Algorithm**: Decision Tree Classifier
+- **Features**: 7 primary features (species, country, year, resistance patterns)
+- **Performance**: 100% accuracy (reported)
+- **Output**: Complete antibiotic sequence with cefiderocol as last resort
+
+### 2. Cefiderocol Use Prediction Model
+- **Algorithm**: Random Forest Classifier
+- **Features**: 20+ features including MIC values, resistance patterns, ratios
+- **Performance**: AUC 1.000, Precision 1.000, Recall 1.000
+- **Output**: Binary decision for cefiderocol use
+
+### 3. Phenotypic Signature Analysis
+- **Method**: Clustering analysis with PCA
+- **Purpose**: Identify resistance patterns and signatures
+- **Output**: Cluster assignments and phenotypic signatures
+
+## 📈 Performance Metrics
+
+### Antibiotic Decision Tree
+- **Accuracy**: 100%
+- **Target**: First antibiotic recommendation
+- **Coverage**: 40+ antibiotics analyzed
+
+### Cefiderocol Prediction
+- **AUC Score**: 1.000
+- **Precision**: 1.000
+- **Recall**: 1.000
+- **Sensitivity**: 1.000
+- **Specificity**: 1.000
+
+## 🏥 Clinical Applications
+
+### Decision Framework
+1. **First-Line Treatment**: Most effective antibiotic based on species, region, resistance
+2. **Sequential Alternatives**: Complete sequence of alternatives
+3. **Phenotypic Analysis**: Resistance patterns and clusters
+4. **Last Resort Decision**: Cefiderocol use determination
+
+### Example Usage
+```python
+# Get antibiotic recommendations
+recommendations = model.recommend_antibiotics(
+    species="Escherichia coli",
+    country="France", 
+    year=2023,
+    resistance_profile={'beta_lactam': 0.3, 'quinolone': 0.7}
+)
+```
+
+## 📋 Data Sources
+
+- **ATLAS Database** (2.xlsx): Global antimicrobial susceptibility data
+  - 966,805 isolates, 134 variables
+  - Multiple countries and species
+  - Temporal coverage
+
+- **SIDERO-WT Database** (1.xlsx): Cefiderocol-specific susceptibility data
+  - MIC values and resistance patterns
+  - Species and geographic information
+
+## ⚠️ Important Limitations
+
+### Critical Considerations
+- **No real treatment failure data** available
+- **Targets based on theoretical resistance patterns**
+- **High performance likely reflects simplified target definitions**
+- **Geographic and temporal biases possible**
+
+### Clinical Implementation
+- **Do NOT use for clinical decisions** without validation
+- **Validate on real treatment failure data**
+- **Include clinical factors** (comorbidities, previous exposure)
+- **Prospective validation** required before implementation
+- **Use as research tool** only
+
+## 🔬 Technical Details
+
+### Feature Engineering
+- MIC value standardization
+- Resistance threshold application
+- Categorical encoding
+- Composite resistance scores
+- MIC ratios for comparative analysis
+
+### Model Training
+- Train/Test Split: 80/20
+- Cross-validation: 5-fold StratifiedKFold
+- Feature scaling: StandardScaler
+- Random State: 42
+
+### Dependencies
+- **Scikit-learn**: Machine learning algorithms
+- **XGBoost**: Gradient boosting
+- **SHAP**: Feature importance analysis
+- **Pandas/NumPy**: Data manipulation
+- **Matplotlib/Seaborn**: Visualization
+- **ReportLab**: PDF generation
+
+## 📚 Documentation
+
+### Complete Documentation
+- **Methodology**: `docs/vivli_complete_methodology.html`
+- **Antibiotic System**: `docs/antibiotic_recommendation_system_details_english.html`
+- **Cefiderocol Model**: `docs/last_prediction_model_details.html`
+
+### Reports
+- **English PDF Report**: `outputs/reports/antibiotic_recommendation_report_english.pdf`
+- **Methodology HTML**: `docs/vivli_complete_methodology.html`
+
+## 🚀 Future Directions
+
+### 1. Clinical Integration
+- Include patient factors (age, comorbidities, allergies)
+- Add pharmacokinetic considerations
+- Integrate with local resistance patterns
+
+### 2. Model Improvements
+- Include genomic resistance markers
+- Add temporal resistance trends
+- Develop species-specific models
+
+### 3. Clinical Validation
+- Prospective clinical studies
+- Real-world implementation
+- Outcome assessment
+
+### 4. Broader Applications
+- Extend to other novel antibiotics
+- Develop comprehensive antimicrobial decision support systems
+- Integrate with precision medicine approaches
+
+## 🤝 Contributing
+
+This is a research project. For contributions or questions:
+1. Review the methodology documentation
+2. Understand the limitations and clinical considerations
+3. Ensure proper validation before clinical use
+
+## 📄 License
+
+This project is for research purposes only. Clinical use requires proper validation and regulatory approval.
+
+## 📞 Contact
+
+For technical support or questions, please refer to the source code and documentation in the `docs/` folder.
+
+---
+
+**⚠️ Disclaimer**: This system is designed for research purposes only. Clinical implementation requires comprehensive validation and regulatory approval. The models have critical limitations and should not be used for clinical decisions without proper validation.

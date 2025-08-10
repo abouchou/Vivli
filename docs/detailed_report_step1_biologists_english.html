@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detailed Report - Step 1: Data Configuration and Understanding</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        
+        .container {
+            background-color: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: #2c3e50;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 15px;
+            font-size: 2.4em;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        h2 {
+            color: #34495e;
+            border-bottom: 2px solid #ecf0f1;
+            padding-bottom: 10px;
+            margin-top: 40px;
+            font-size: 1.8em;
+        }
+        
+        h3 {
+            color: #2980b9;
+            margin-top: 30px;
+            font-size: 1.4em;
+        }
+        
+        h4 {
+            color: #3498db;
+            margin-top: 25px;
+            font-size: 1.2em;
+        }
+        
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 25px 0;
+            font-size: 0.9em;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        th, td {
+            border: 1px solid #ddd;
+            padding: 15px;
+            text-align: left;
+        }
+        
+        th {
+            background-color: #3498db;
+            color: white;
+            font-weight: bold;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        
+        tr:hover {
+            background-color: #e8f4f8;
+        }
+        
+        .plot-container {
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            border: 1px solid #e9ecef;
+        }
+        
+        .plot-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .plot-caption {
+            margin-top: 15px;
+            font-style: italic;
+            color: #666;
+            font-size: 0.95em;
+        }
+        
+        .highlight-box {
+            background-color: #e8f5e8;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 5px solid #28a745;
+            margin: 25px 0;
+        }
+        
+        .info-box {
+            background-color: #d1ecf1;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 5px solid #17a2b8;
+            margin: 25px 0;
+        }
+        
+        .warning-box {
+            background-color: #fff3cd;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 5px solid #ffc107;
+            margin: 25px 0;
+        }
+        
+        ul, ol {
+            margin: 20px 0;
+            padding-left: 30px;
+        }
+        
+        li {
+            margin: 10px 0;
+        }
+        
+        .footer {
+            margin-top: 50px;
+            padding-top: 30px;
+            border-top: 2px solid #ddd;
+            font-size: 0.9em;
+            color: #666;
+            text-align: center;
+        }
+        
+        .stats-highlight {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 25px 0;
+            text-align: center;
+        }
+        
+        .stats-highlight h3 {
+            color: white;
+            margin: 0 0 15px 0;
+        }
+        
+        .stats-highlight p {
+            margin: 5px 0;
+            font-size: 1.1em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Detailed Report - Step 1</h1>
+        <h2 style="text-align: center; color: #2c3e50;">Data Configuration and Understanding</h2>
+        
+        <div class="stats-highlight">
+            <h3>📊 Key Statistics</h3>
+            <p><strong>Total Isolates Analyzed:</strong> 1,014,420</p>
+            <p><strong>Cefiderocol Resistance:</strong> 1.97% (940 isolates)</p>
+            <p><strong>Datasets:</strong> SIDERO-WT (47,615) + ATLAS (966,805)</p>
+        </div>
+
+        <h2>Executive Summary</h2>
+        <div class="info-box">
+            <p>This report presents the comprehensive analysis of Step 1, which focused on configuring the working environment and understanding the SIDERO-WT and ATLAS datasets for cefiderocol resistance prediction. The analysis successfully established the data infrastructure, normalized MIC values, defined binary resistance targets, and performed exploratory data analysis.</p>
+        </div>
+
+        <h2>1. Environment Configuration</h2>
+        
+        <h3>1.1 Infrastructure Setup</h3>
+        <ul>
+            <li><strong>Python Environment:</strong> Configured with essential libraries for data analysis</li>
+            <li><strong>Project Structure:</strong> Organized directory structure with <code>outputs/plots/</code> for visualizations</li>
+            <li><strong>Processing Pipeline:</strong> Modular functions for data loading, cleaning, and analysis</li>
+        </ul>
+
+        <h3>1.2 Technical Implementation</h3>
+        <ul>
+            <li><strong>Data Loading Functions:</strong> Robust error handling for Excel file processing</li>
+            <li><strong>MIC Value Cleaning:</strong> Automated removal of non-numeric characters (≤, ≥, etc.)</li>
+            <li><strong>Column Standardization:</strong> Consistent naming conventions across datasets</li>
+            <li><strong>Missing Value Management:</strong> Proper handling of NaN values</li>
+        </ul>
+
+        <h2>2. Dataset Exploration</h2>
+        
+        <h3>2.1 SIDERO-WT Dataset (1.xlsx)</h3>
+        <div class="highlight-box">
+            <h4>Dataset Characteristics:</h4>
+            <ul>
+                <li><strong>Size:</strong> 47,615 isolates × 20 variables</li>
+                <li><strong>Primary Focus:</strong> Cefiderocol susceptibility testing</li>
+                <li><strong>Geographic Coverage:</strong> Multi-regional data collection</li>
+                <li><strong>Temporal Range:</strong> Year-based collection data</li>
+            </ul>
+        </div>
+
+        <h4>Key Variables:</h4>
+        <table>
+            <tr>
+                <th>Variable</th>
+                <th>Description</th>
+                <th>Data Type</th>
+            </tr>
+            <tr>
+                <td><code>cefiderocol_mic</code></td>
+                <td>Cefiderocol MIC values</td>
+                <td>Numeric</td>
+            </tr>
+            <tr>
+                <td><code>meropenem_mic</code></td>
+                <td>Meropenem MIC values</td>
+                <td>Numeric</td>
+            </tr>
+            <tr>
+                <td><code>species</code></td>
+                <td>Bacterial species identification</td>
+                <td>Categorical</td>
+            </tr>
+            <tr>
+                <td><code>region</code></td>
+                <td>Geographic region</td>
+                <td>Categorical</td>
+            </tr>
+            <tr>
+                <td><code>year</code></td>
+                <td>Collection year</td>
+                <td>Numeric</td>
+            </tr>
+        </table>
+
+        <h3>2.2 ATLAS Dataset (2.xlsx)</h3>
+        <div class="highlight-box">
+            <h4>Dataset Characteristics:</h4>
+            <ul>
+                <li><strong>Size:</strong> 966,805 isolates × 134 variables</li>
+                <li><strong>Primary Focus:</strong> Comprehensive antimicrobial susceptibility testing</li>
+                <li><strong>Geographic Coverage:</strong> Global coverage with country-level data</li>
+                <li><strong>Temporal Range:</strong> Year-based collection data</li>
+            </ul>
+        </div>
+
+        <h2>3. Data Normalization and Preprocessing</h2>
+        
+        <h3>3.1 MIC Value Standardization</h3>
+        <div class="info-box">
+            <h4>Implemented Process:</h4>
+            <ol>
+                <li><strong>Character Cleaning:</strong> Removal of non-numeric characters (≤, ≥, <, >)</li>
+                <li><strong>Type Conversion:</strong> Conversion to float format</li>
+                <li><strong>Missing Value Handling:</strong> Standardized NaN representation</li>
+                <li><strong>Validation:</strong> Quality checks for data integrity</li>
+            </ol>
+        </div>
+
+        <h2>4. Binary Resistance Target Definition</h2>
+        
+        <h3>4.1 Cefiderocol Resistance Criteria</h3>
+        <div class="warning-box">
+            <p><strong>Definition:</strong> MIC ≥ 4 µg/mL = Resistant</p>
+            <p><strong>Rationale:</strong> Based on clinical breakpoints and regulatory guidelines</p>
+        </div>
+
+        <h3>4.2 Resistance Distribution Results</h3>
+        <table>
+            <tr>
+                <th>Category</th>
+                <th>Count</th>
+                <th>Percentage</th>
+            </tr>
+            <tr>
+                <td><strong>Sensitive</strong></td>
+                <td>46,675</td>
+                <td>98.03%</td>
+            </tr>
+            <tr>
+                <td><strong>Resistant</strong></td>
+                <td>940</td>
+                <td>1.97%</td>
+            </tr>
+            <tr>
+                <td><strong>Total</strong></td>
+                <td>47,615</td>
+                <td>100%</td>
+            </tr>
+        </table>
+
+        <div class="highlight-box">
+            <h4>Key Observations:</h4>
+            <ul>
+                <li><strong>Low Resistance Prevalence:</strong> Only 1.97% of isolates show cefiderocol resistance</li>
+                <li><strong>Class Imbalance:</strong> Significant imbalance between sensitive and resistant classes</li>
+                <li><strong>Clinical Relevance:</strong> Low resistance rates suggest good antimicrobial activity</li>
+            </ul>
+        </div>
+
+        <h2>5. Exploratory Data Analysis (EDA)</h2>
+        
+        <h3>5.1 Species Distribution Analysis</h3>
+        
+        <h4>SIDERO-WT Dataset - Top 10 Species</h4>
+        <table>
+            <tr>
+                <th>Rank</th>
+                <th>Species</th>
+                <th>Count</th>
+                <th>Percentage</th>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>Pseudomonas aeruginosa</td>
+                <td>7,700</td>
+                <td>16.17%</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>Escherichia coli</td>
+                <td>7,583</td>
+                <td>15.92%</td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td>Klebsiella pneumoniae</td>
+                <td>7,285</td>
+                <td>15.30%</td>
+            </tr>
+            <tr>
+                <td>4</td>
+                <td>Acinetobacter baumannii</td>
+                <td>4,384</td>
+                <td>9.21%</td>
+            </tr>
+            <tr>
+                <td>5</td>
+                <td>Serratia marcescens</td>
+                <td>3,603</td>
+                <td>7.57%</td>
+            </tr>
+        </table>
+
+        <h2>6. Visualization Outputs</h2>
+        
+        <h3>6.1 Generated Plots</h3>
+        
+        <div class="plot-container">
+            <h4>Cefiderocol MIC Distribution</h4>
+            <img src="outputs/plots/cefiderocol_mic_distribution.png" alt="Cefiderocol MIC Distribution">
+            <div class="plot-caption">
+                This plot shows the distribution of cefiderocol MIC values in the SIDERO-WT dataset. The majority of isolates show low MIC values, indicating good susceptibility to cefiderocol.
+            </div>
+        </div>
+
+        <div class="plot-container">
+            <h4>Temporal Evolution of Cefiderocol MIC</h4>
+            <img src="outputs/plots/cefiderocol_mic_by_year.png" alt="Cefiderocol MIC by Year">
+            <div class="plot-caption">
+                This box plot shows the evolution of cefiderocol MIC values over time. It allows identification of temporal trends in susceptibility patterns.
+            </div>
+        </div>
+
+        <div class="plot-container">
+            <h4>Cefiderocol Resistance by Region</h4>
+            <img src="outputs/plots/cefiderocol_resistance_by_region.png" alt="Resistance by Region">
+            <div class="plot-caption">
+                This plot presents the geographic distribution of cefiderocol resistance patterns. It reveals regional variations in resistance prevalence.
+            </div>
+        </div>
+
+        <div class="plot-container">
+            <h4>Meropenem MIC Distribution (ATLAS)</h4>
+            <img src="outputs/plots/meropenem_mic_distribution_atlas.png" alt="Meropenem MIC Distribution">
+            <div class="plot-caption">
+                This plot shows the distribution of meropenem MIC values in the ATLAS dataset, allowing comparison with cefiderocol patterns.
+            </div>
+        </div>
+
+        <h2>7. Key Findings and Insights</h2>
+        
+        <h3>7.1 Resistance Patterns</h3>
+        <div class="info-box">
+            <ol>
+                <li><strong>Low Cefiderocol Resistance:</strong> Only 1.97% resistance rate suggests excellent antimicrobial activity</li>
+                <li><strong>Class Imbalance:</strong> Significant imbalance requires special consideration in modeling</li>
+                <li><strong>Geographic Variation:</strong> Regional differences observed in resistance patterns</li>
+            </ol>
+        </div>
+
+        <h3>7.2 Species Distribution</h3>
+        <div class="info-box">
+            <ol>
+                <li><strong>Gram-Negative Dominance:</strong> SIDERO-WT focuses on Gram-negative pathogens</li>
+                <li><strong>Broad Coverage:</strong> ATLAS includes both Gram-positive and Gram-negative species</li>
+                <li><strong>Clinical Relevance:</strong> Major pathogens well-represented in both datasets</li>
+            </ol>
+        </div>
+
+        <h2>8. Recommendations for Next Steps</h2>
+        
+        <h3>8.1 Modeling Considerations</h3>
+        <div class="highlight-box">
+            <ol>
+                <li><strong>Class Imbalance Handling:</strong> Implement techniques for imbalanced classification</li>
+                <li><strong>Feature Engineering:</strong> Create derived features from MIC values</li>
+                <li><strong>Cross-Validation:</strong> Use stratified sampling for model validation</li>
+            </ol>
+        </div>
+
+        <h2>9. Conclusion</h2>
+        
+        <div class="stats-highlight">
+            <h3>✅ Step 1 Successfully Completed</h3>
+            <p>The analysis reveals a robust data infrastructure, quality datasets, clear resistance definition, rich feature set, and comprehensive visualization framework.</p>
+            <p>The project is now ready for advanced modeling and predictive analysis in subsequent steps.</p>
+        </div>
+
+        <div class="footer">
+            <p><strong>Report Generated:</strong> July 2025</p>
+            <p><strong>Data Sources:</strong> SIDERO-WT (1.xlsx), ATLAS (2.xlsx)</p>
+            <p><strong>Analysis Tools:</strong> Python, pandas, seaborn, matplotlib</p>
+            <p><strong>Total Isolates Analyzed:</strong> 1,014,420 (47,615 + 966,805)</p>
+        </div>
+    </div>
+</body>
+</html> 

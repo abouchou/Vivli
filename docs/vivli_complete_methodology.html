@@ -1,0 +1,773 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vivli System - Complete Methodology</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+        
+        .container {
+            background-color: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            color: #2c3e50;
+            border-bottom: 3px solid #27ae60;
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+        }
+        
+        h2 {
+            color: #34495e;
+            border-bottom: 2px solid #ecf0f1;
+            padding-bottom: 8px;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+        
+        h3 {
+            color: #2c3e50;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            font-size: 1.4em;
+        }
+        
+        pre {
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        th {
+            background-color: #27ae60;
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: bold;
+        }
+        
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #ecf0f1;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 20px;
+            background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+            color: white;
+            border-radius: 10px;
+        }
+        
+        .header h1 {
+            color: white;
+            border-bottom: none;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Vivli System</h1>
+            <p>Complete Methodology</p>
+            <p>From Step 1 to Final Implementation</p>
+            <p>Generated on August 10, 2025 at 13:59</p>
+        </div>
+        
+        <h1>Vivli System - Complete Methodology</h1>
+<h2>Executive Summary</h2>
+<p>The Vivli system is a comprehensive antibiotic decision support platform that combines multiple prediction models to provide evidence-based antibiotic recommendations. This methodology document outlines the complete approach from data preparation through final clinical recommendations.</p>
+<h2>Methodology Overview</h2>
+<p>The Vivli system follows a structured 4-step methodology:</p>
+<ol>
+<li><strong>Step 1</strong>: Data Preparation and Exploration</li>
+<li><strong>Step 2</strong>: Antibiotic Decision Tree Model Development</li>
+<li><strong>Step 3</strong>: Phenotypic Signature Analysis and Clustering</li>
+<li><strong>Step 4</strong>: Cefiderocol Use Prediction Model</li>
+</ol>
+<hr />
+<h2>Step 1: Data Preparation and Exploration</h2>
+<h3>1.1 Data Sources</h3>
+<p><strong>Primary Databases:</strong>
+- <strong>ATLAS Database</strong> (2.xlsx): Global antimicrobial susceptibility data
+- <strong>SIDERO-WT Database</strong> (1.xlsx): Cefiderocol-specific susceptibility data</p>
+<p><strong>Data Characteristics:</strong>
+- <strong>ATLAS</strong>: 966,805 isolates, 134 variables, multiple countries and species
+- <strong>SIDERO-WT</strong>: Cefiderocol-specific data with MIC values and resistance patterns</p>
+<h3>1.2 Data Cleaning and Preprocessing</h3>
+<h4>MIC Value Standardization</h4>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">clean_mic_values</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Standardize MIC values across databases.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">pd</span><span class="o">.</span><span class="n">isna</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+        <span class="n">cleaned_value</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;[^\d.]&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">cleaned_value</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+    <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+</code></pre></div>
+
+<h4>Resistance Threshold Application</h4>
+<div class="codehilite"><pre><span></span><code><span class="n">breakpoints</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;cefiderocol_mic&quot;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
+    <span class="s2">&quot;meropenem_mic&quot;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span>
+    <span class="s2">&quot;CIPROFLOXACIN_mic&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="s2">&quot;colistin_mic&quot;</span><span class="p">:</span> <span class="mi">4</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h3>1.3 Exploratory Data Analysis</h3>
+<h4>Species Distribution Analysis</h4>
+<ul>
+<li>Top bacterial species identification</li>
+<li>Geographic distribution patterns</li>
+<li>Temporal evolution analysis</li>
+</ul>
+<h4>Resistance Pattern Exploration</h4>
+<ul>
+<li>Global resistance trends</li>
+<li>Regional variations</li>
+<li>Species-specific resistance profiles</li>
+</ul>
+<hr />
+<h2>Step 2: Antibiotic Decision Tree Model Development</h2>
+<h3>2.1 Model Architecture</h3>
+<p><strong>Algorithm</strong>: Decision Tree Classifier
+<strong>Parameters</strong>:
+- Max Depth: 10
+- Random State: 42
+- Train/Test Split: 80/20</p>
+<h3>2.2 Feature Engineering</h3>
+<h4>Primary Features (7 total)</h4>
+<ol>
+<li><strong>Species encoded</strong> (LabelEncoder)</li>
+<li><strong>Country encoded</strong> (LabelEncoder)</li>
+<li><strong>Year</strong> (temporal data)</li>
+<li><strong>Beta-lactam resistance</strong> (mean resistance score)</li>
+<li><strong>Aminoglycoside resistance</strong> (mean resistance score)</li>
+<li><strong>Quinolone resistance</strong> (mean resistance score)</li>
+<li><strong>Other resistance</strong> (mean resistance score)</li>
+</ol>
+<h4>Antibiotic Analysis (40+ antibiotics)</h4>
+<p><strong>Categories analyzed</strong>:
+- Carbapenems: Meropenem, Imipenem, Doripenem, Ertapenem, Tebipenem
+- Beta-lactam combinations: Ceftazidime avibactam, Ceftaroline avibactam, Ceftolozane tazobactam
+- Cephalosporins: Cefepime, Ceftazidime, Ceftriaxone, Cefoxitin, Cefixime
+- Aminoglycosides: Amikacin, Gentamicin, Tobramycin, Streptomycin
+- Fluoroquinolones: Ciprofloxacin, Levofloxacin, Gatifloxacin, Moxifloxacin
+- Others: Colistin, Vancomycin, Linezolid, Tigecycline, etc.</p>
+<h3>2.3 Training Process</h3>
+<h4>Step 2.1: Data Loading and Cleaning</h4>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Load ATLAS data</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="s2">&quot;2.xlsx&quot;</span><span class="p">)</span>
+
+<span class="c1"># Clean MIC values for all antibiotics</span>
+<span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">antibiotic_columns</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">col</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">clean_mic_values</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_numeric</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">col</span><span class="p">],</span> <span class="n">errors</span><span class="o">=</span><span class="s1">&#39;coerce&#39;</span><span class="p">)</span>
+</code></pre></div>
+
+<h4>Step 2.2: Resistance Threshold Definition</h4>
+<div class="codehilite"><pre><span></span><code><span class="n">thresholds</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;Meropenem&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span> <span class="s1">&#39;Imipenem&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span> <span class="s1">&#39;Doripenem&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span> <span class="s1">&#39;Ertapenem&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;Tebipenem&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
+    <span class="s1">&#39;Ceftazidime avibactam&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span> <span class="s1">&#39;Ceftaroline avibactam&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span> <span class="s1">&#39;Ceftolozane tazobactam&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span>
+    <span class="s1">&#39;Meropenem vaborbactam&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span> <span class="s1">&#39;Aztreonam avibactam&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span> <span class="s1">&#39;Ceftibuten avibactam&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
+    <span class="s1">&#39;Cefepime&#39;</span><span class="p">:</span> <span class="mi">32</span><span class="p">,</span> <span class="s1">&#39;Ceftazidime&#39;</span><span class="p">:</span> <span class="mi">32</span><span class="p">,</span> <span class="s1">&#39;Ceftriaxone&#39;</span><span class="p">:</span> <span class="mi">64</span><span class="p">,</span> <span class="s1">&#39;Cefoxitin&#39;</span><span class="p">:</span> <span class="mi">32</span><span class="p">,</span>
+    <span class="s1">&#39;Cefixime&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;Ceftaroline&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span> <span class="s1">&#39;Ceftibuten&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span> <span class="s1">&#39;Cefpodoxime&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+    <span class="s1">&#39;Cefoperazone sulbactam&#39;</span><span class="p">:</span> <span class="mi">64</span><span class="p">,</span> <span class="s1">&#39;Piperacillin tazobactam&#39;</span><span class="p">:</span> <span class="mi">128</span><span class="p">,</span>
+    <span class="s1">&#39;Ampicillin sulbactam&#39;</span><span class="p">:</span> <span class="mi">32</span><span class="p">,</span> <span class="s1">&#39;Amoxycillin clavulanate&#39;</span><span class="p">:</span> <span class="mi">32</span><span class="p">,</span>
+    <span class="s1">&#39;Ampicillin&#39;</span><span class="p">:</span> <span class="mi">32</span><span class="p">,</span> <span class="s1">&#39;Penicillin&#39;</span><span class="p">:</span> <span class="mf">0.12</span><span class="p">,</span> <span class="s1">&#39;Oxacillin&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+    <span class="s1">&#39;Amikacin&#39;</span><span class="p">:</span> <span class="mi">64</span><span class="p">,</span> <span class="s1">&#39;Gentamicin&#39;</span><span class="p">:</span> <span class="mi">16</span><span class="p">,</span> <span class="s1">&#39;Tobramycin&#39;</span><span class="p">:</span> <span class="mi">16</span><span class="p">,</span> <span class="s1">&#39;Streptomycin&#39;</span><span class="p">:</span> <span class="mi">64</span><span class="p">,</span>
+    <span class="s1">&#39;Ciprofloxacin&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span> <span class="s1">&#39;Levofloxacin&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span> <span class="s1">&#39;Gatifloxacin&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span> <span class="s1">&#39;Moxifloxacin&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
+    <span class="s1">&#39;Colistin&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span> <span class="s1">&#39;Polymyxin B&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
+    <span class="s1">&#39;Tigecycline&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span> <span class="s1">&#39;Minocycline&#39;</span><span class="p">:</span> <span class="mi">16</span><span class="p">,</span> <span class="s1">&#39;Tetracycline&#39;</span><span class="p">:</span> <span class="mi">16</span><span class="p">,</span>
+    <span class="s1">&#39;Vancomycin&#39;</span><span class="p">:</span> <span class="mi">16</span><span class="p">,</span> <span class="s1">&#39;Teicoplanin&#39;</span><span class="p">:</span> <span class="mi">32</span><span class="p">,</span> <span class="s1">&#39;Daptomycin&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span> <span class="s1">&#39;Linezolid&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span>
+    <span class="s1">&#39;Clarithromycin&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span> <span class="s1">&#39;Erythromycin&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span> <span class="s1">&#39;Azithromycin&#39;</span><span class="p">:</span> <span class="mi">16</span><span class="p">,</span> <span class="s1">&#39;Clindamycin&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
+    <span class="s1">&#39;Metronidazole&#39;</span><span class="p">:</span> <span class="mi">16</span><span class="p">,</span> <span class="s1">&#39;Trimethoprim sulfa&#39;</span><span class="p">:</span> <span class="mi">76</span><span class="p">,</span> <span class="s1">&#39;Sulfamethoxazole&#39;</span><span class="p">:</span> <span class="mi">512</span><span class="p">,</span>
+    <span class="s1">&#39;Quinupristin dalfopristin&#39;</span><span class="p">:</span> <span class="mi">4</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h4>Step 2.3: Antibiotic Scoring</h4>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">calculate_antibiotic_scores</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">antibiotic_columns</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculate efficacy scores for each antibiotic.&quot;&quot;&quot;</span>
+    <span class="n">scores_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[[</span><span class="s1">&#39;Species&#39;</span><span class="p">,</span> <span class="s1">&#39;Country&#39;</span><span class="p">,</span> <span class="s1">&#39;Year&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+    <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">antibiotic_columns</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">col</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="n">resistant_col</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s2">_resistant&quot;</span>
+            <span class="k">if</span> <span class="n">resistant_col</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+                <span class="c1"># Score based on proportion of susceptible strains</span>
+                <span class="n">scores_df</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s2">_score&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="o">~</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">resistant_col</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">scores_df</span>
+</code></pre></div>
+
+<h4>Step 2.4: Optimal Antibiotic Order Determination</h4>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">determine_antibiotic_order</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scores_df</span><span class="p">,</span> <span class="n">antibiotic_columns</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Determine optimal antibiotic order based on global efficacy.&quot;&quot;&quot;</span>
+    <span class="n">antibiotic_efficacy</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">antibiotic_columns</span><span class="p">:</span>
+        <span class="n">score_col</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s2">_score&quot;</span>
+        <span class="k">if</span> <span class="n">score_col</span> <span class="ow">in</span> <span class="n">scores_df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="n">efficacy</span> <span class="o">=</span> <span class="n">scores_df</span><span class="p">[</span><span class="n">score_col</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+            <span class="n">antibiotic_efficacy</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="n">efficacy</span>
+
+    <span class="c1"># Sort by decreasing efficacy</span>
+    <span class="n">sorted_antibiotics</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">antibiotic_efficacy</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1"># Add cefiderocol at the end (last resort)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">antibiotic_order</span> <span class="o">=</span> <span class="p">[</span><span class="n">ab</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">ab</span> <span class="ow">in</span> <span class="n">sorted_antibiotics</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="s1">&#39;Cefiderocol&#39;</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">antibiotic_order</span>
+</code></pre></div>
+
+<h4>Step 2.5: Decision Feature Creation</h4>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">create_decision_features</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scores_df</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create features for decision tree.&quot;&quot;&quot;</span>
+    <span class="c1"># Encode categorical variables</span>
+    <span class="n">le_species</span> <span class="o">=</span> <span class="n">LabelEncoder</span><span class="p">()</span>
+    <span class="n">le_country</span> <span class="o">=</span> <span class="n">LabelEncoder</span><span class="p">()</span>
+
+    <span class="n">scores_df</span><span class="p">[</span><span class="s1">&#39;species_encoded&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">le_species</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">scores_df</span><span class="p">[</span><span class="s1">&#39;Species&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="s1">&#39;Unknown&#39;</span><span class="p">))</span>
+    <span class="n">scores_df</span><span class="p">[</span><span class="s1">&#39;country_encoded&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">le_country</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">scores_df</span><span class="p">[</span><span class="s1">&#39;Country&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="s1">&#39;Unknown&#39;</span><span class="p">))</span>
+
+    <span class="c1"># Create resistance features by antibiotic class</span>
+    <span class="n">beta_lactam_cols</span> <span class="o">=</span> <span class="p">[</span><span class="n">col</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">scores_df</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">x</span> <span class="ow">in</span> <span class="n">col</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;penem&#39;</span><span class="p">,</span> <span class="s1">&#39;cef&#39;</span><span class="p">,</span> <span class="s1">&#39;penicillin&#39;</span><span class="p">,</span> <span class="s1">&#39;tazobactam&#39;</span><span class="p">,</span> <span class="s1">&#39;avibactam&#39;</span><span class="p">])]</span>
+    <span class="n">aminoglycoside_cols</span> <span class="o">=</span> <span class="p">[</span><span class="n">col</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">scores_df</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">x</span> <span class="ow">in</span> <span class="n">col</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;micin&#39;</span><span class="p">,</span> <span class="s1">&#39;gentamicin&#39;</span><span class="p">,</span> <span class="s1">&#39;tobramycin&#39;</span><span class="p">,</span> <span class="s1">&#39;streptomycin&#39;</span><span class="p">])]</span>
+    <span class="n">quinolone_cols</span> <span class="o">=</span> <span class="p">[</span><span class="n">col</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">scores_df</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">x</span> <span class="ow">in</span> <span class="n">col</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;floxacin&#39;</span><span class="p">])]</span>
+    <span class="n">other_cols</span> <span class="o">=</span> <span class="p">[</span><span class="n">col</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">scores_df</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">x</span> <span class="ow">in</span> <span class="n">col</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;colistin&#39;</span><span class="p">,</span> <span class="s1">&#39;vancomycin&#39;</span><span class="p">,</span> <span class="s1">&#39;linezolid&#39;</span><span class="p">,</span> <span class="s1">&#39;tigecycline&#39;</span><span class="p">])]</span>
+
+    <span class="c1"># Calculate mean resistance scores by class</span>
+    <span class="n">scores_df</span><span class="p">[</span><span class="s1">&#39;beta_lactam_resistance&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">scores_df</span><span class="p">[</span><span class="n">beta_lactam_cols</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">scores_df</span><span class="p">[</span><span class="s1">&#39;aminoglycoside_resistance&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">scores_df</span><span class="p">[</span><span class="n">aminoglycoside_cols</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">scores_df</span><span class="p">[</span><span class="s1">&#39;quinolone_resistance&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">scores_df</span><span class="p">[</span><span class="n">quinolone_cols</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">scores_df</span><span class="p">[</span><span class="s1">&#39;other_resistance&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">scores_df</span><span class="p">[</span><span class="n">other_cols</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">scores_df</span>
+</code></pre></div>
+
+<h4>Step 2.6: Model Training</h4>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">train_decision_tree</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">features_df</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Train decision tree to recommend first antibiotic.&quot;&quot;&quot;</span>
+    <span class="c1"># Select features</span>
+    <span class="n">feature_cols</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;species_encoded&#39;</span><span class="p">,</span> <span class="s1">&#39;country_encoded&#39;</span><span class="p">,</span> <span class="s1">&#39;Year&#39;</span><span class="p">,</span>
+                   <span class="s1">&#39;beta_lactam_resistance&#39;</span><span class="p">,</span> <span class="s1">&#39;aminoglycoside_resistance&#39;</span><span class="p">,</span>
+                   <span class="s1">&#39;quinolone_resistance&#39;</span><span class="p">,</span> <span class="s1">&#39;other_resistance&#39;</span><span class="p">]</span>
+
+    <span class="n">X</span> <span class="o">=</span> <span class="n">features_df</span><span class="p">[</span><span class="n">feature_cols</span><span class="p">]</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="c1"># Create target: first antibiotic recommendation</span>
+    <span class="n">first_choice</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">features_df</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+        <span class="n">best_antibiotic</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">best_score</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="k">for</span> <span class="n">ab</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">antibiotic_order</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>  <span class="c1"># Exclude cefiderocol</span>
+            <span class="n">score_col</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">ab</span><span class="si">}</span><span class="s2">_score&quot;</span>
+            <span class="k">if</span> <span class="n">score_col</span> <span class="ow">in</span> <span class="n">features_df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">features_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="n">score_col</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">best_score</span><span class="p">:</span>
+                    <span class="n">best_score</span> <span class="o">=</span> <span class="n">features_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="n">score_col</span><span class="p">]</span>
+                    <span class="n">best_antibiotic</span> <span class="o">=</span> <span class="n">ab</span>
+        <span class="n">first_choice</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">best_antibiotic</span> <span class="k">if</span> <span class="n">best_antibiotic</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">antibiotic_order</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+    <span class="c1"># Encode target</span>
+    <span class="n">le_target</span> <span class="o">=</span> <span class="n">LabelEncoder</span><span class="p">()</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">le_target</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">first_choice</span><span class="p">)</span>
+
+    <span class="c1"># Train/test split</span>
+    <span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+
+    <span class="c1"># Train decision tree</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">decision_tree</span> <span class="o">=</span> <span class="n">DecisionTreeClassifier</span><span class="p">(</span><span class="n">max_depth</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">decision_tree</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span>
+</code></pre></div>
+
+<h3>2.4 Model Performance</h3>
+<p><strong>Performance Metrics:</strong>
+- <strong>Accuracy</strong>: 100% (reported)
+- <strong>Target</strong>: First antibiotic recommendation
+- <strong>Output</strong>: Complete antibiotic sequence</p>
+<p><strong>Antibiotic Order (Top 20):</strong>
+1. Cefoperazone sulbactam
+2. Gatifloxacin
+3. Tetracycline
+4. Metronidazole
+5. Cefoxitin
+6. Linezolid
+7. Daptomycin
+8. Ertapenem
+9. Quinupristin dalfopristin
+10. Teicoplanin
+11. Tigecycline
+12. Meropenem vaborbactam
+13. Sulbactam
+14. Ceftibuten
+15. Vancomycin
+16. Clarithromycin
+17. Azithromycin
+18. Ceftaroline avibactam
+19. Doripenem
+20. Ceftazidime avibactam
+...
+49. Cefiderocol (last resort)</p>
+<hr />
+<h2>Step 3: Phenotypic Signature Analysis and Clustering</h2>
+<h3>3.1 Data Preparation for Clustering</h3>
+<h4>Feature Selection</h4>
+<ul>
+<li>MIC values for key antibiotics</li>
+<li>Resistance patterns</li>
+<li>Species and geographic information</li>
+<li>Temporal data</li>
+</ul>
+<h4>Dimensionality Reduction</h4>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Principal Component Analysis (PCA)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.decomposition</span><span class="w"> </span><span class="kn">import</span> <span class="n">PCA</span>
+
+<span class="c1"># Standardize features</span>
+<span class="n">scaler</span> <span class="o">=</span> <span class="n">StandardScaler</span><span class="p">()</span>
+<span class="n">X_scaled</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+
+<span class="c1"># Apply PCA</span>
+<span class="n">pca</span> <span class="o">=</span> <span class="n">PCA</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="mf">0.95</span><span class="p">)</span>  <span class="c1"># Retain 95% variance</span>
+<span class="n">X_pca</span> <span class="o">=</span> <span class="n">pca</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X_scaled</span><span class="p">)</span>
+</code></pre></div>
+
+<h3>3.2 Clustering Analysis</h3>
+<h4>Optimal Cluster Determination</h4>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Elbow method for optimal cluster number</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.cluster</span><span class="w"> </span><span class="kn">import</span> <span class="n">KMeans</span>
+
+<span class="n">inertias</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">K_range</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">11</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">K_range</span><span class="p">:</span>
+    <span class="n">kmeans</span> <span class="o">=</span> <span class="n">KMeans</span><span class="p">(</span><span class="n">n_clusters</span><span class="o">=</span><span class="n">k</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+    <span class="n">kmeans</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_pca</span><span class="p">)</span>
+    <span class="n">inertias</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">kmeans</span><span class="o">.</span><span class="n">inertia_</span><span class="p">)</span>
+</code></pre></div>
+
+<h4>Hierarchical Clustering</h4>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">scipy.cluster.hierarchy</span><span class="w"> </span><span class="kn">import</span> <span class="n">dendrogram</span><span class="p">,</span> <span class="n">linkage</span>
+
+<span class="c1"># Perform hierarchical clustering</span>
+<span class="n">linkage_matrix</span> <span class="o">=</span> <span class="n">linkage</span><span class="p">(</span><span class="n">X_pca</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;ward&#39;</span><span class="p">)</span>
+
+<span class="c1"># Plot dendrogram</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+<span class="n">dendrogram</span><span class="p">(</span><span class="n">linkage_matrix</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Hierarchical Clustering Dendrogram&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Sample Index&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Distance&#39;</span><span class="p">)</span>
+</code></pre></div>
+
+<h3>3.3 Phenotypic Signature Identification</h3>
+<h4>Cluster Characterization</h4>
+<ul>
+<li>Resistance patterns by cluster</li>
+<li>Species distribution within clusters</li>
+<li>Geographic patterns</li>
+<li>Temporal trends</li>
+</ul>
+<h4>Signature Validation</h4>
+<ul>
+<li>Cross-validation of cluster stability</li>
+<li>Biological interpretation of signatures</li>
+<li>Clinical relevance assessment</li>
+</ul>
+<hr />
+<h2>Step 4: Cefiderocol Use Prediction Model</h2>
+<h3>4.1 Model Architecture</h3>
+<p><strong>Best Model</strong>: Random Forest Classifier
+<strong>Alternative Models Tested</strong>: XGBoost, Gradient Boosting, Logistic Regression
+<strong>Cross-validation</strong>: 5-fold StratifiedKFold
+<strong>Feature Scaling</strong>: StandardScaler</p>
+<h3>4.2 Target Definition</h3>
+<p><strong>Use cefiderocol when:</strong>
+- Cefiderocol is susceptible (MIC &lt; 4 mg/L)
+- AND resistance to other antibiotics is present</p>
+<p><strong>Target variable</strong>: <code>use_cefiderocol</code> (binary: 0 = don't use, 1 = use)</p>
+<h3>4.3 Feature Engineering</h3>
+<h4>Basic MIC Features</h4>
+<ul>
+<li><code>cefiderocol_mic</code>: Direct susceptibility measure</li>
+<li><code>meropenem_mic</code>: Carbapenem susceptibility</li>
+<li><code>CIPROFLOXACIN_mic</code>: Fluoroquinolone susceptibility  </li>
+<li><code>colistin_mic</code>: Polymyxin susceptibility</li>
+</ul>
+<h4>Log-Transformed MIC Features</h4>
+<ul>
+<li><code>log_cefiderocol_mic</code></li>
+<li><code>log_meropenem_mic</code></li>
+<li><code>log_CIPROFLOXACIN_mic</code></li>
+<li><code>log_colistin_mic</code></li>
+</ul>
+<h4>Resistance Binary Features</h4>
+<ul>
+<li><code>cefiderocol_mic_resistant</code>: Binary resistance indicator</li>
+<li><code>meropenem_mic_resistant</code>: Carbapenem resistance</li>
+<li><code>CIPROFLOXACIN_mic_resistant</code>: Fluoroquinolone resistance</li>
+<li><code>colistin_mic_resistant</code>: Polymyxin resistance</li>
+</ul>
+<h4>Composite Resistance Features</h4>
+<ul>
+<li><code>total_resistance</code>: Sum of all resistance indicators</li>
+<li><code>cefiderocol_only_susceptible</code>: Cefiderocol susceptible + others resistant</li>
+<li><code>multidrug_resistant</code>: ≥2 resistant antibiotics</li>
+<li><code>extensively_drug_resistant</code>: ≥3 resistant antibiotics</li>
+</ul>
+<h4>MIC Ratio Features (Comparative Analysis)</h4>
+<ul>
+<li><code>meropenem_cefiderocol_ratio</code>: Comparative susceptibility</li>
+<li><code>ciprofloxacin_cefiderocol_ratio</code>: Comparative susceptibility</li>
+<li><code>colistin_cefiderocol_ratio</code>: Comparative susceptibility</li>
+</ul>
+<h4>Categorical Features</h4>
+<ul>
+<li><code>species_encoded</code>: Encoded bacterial species</li>
+<li><code>region_encoded</code>: Encoded geographic region</li>
+</ul>
+<h3>4.4 Model Training Process</h3>
+<h4>Step 4.1: Data Preparation</h4>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">load_and_prepare_data</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Load and prepare data for cefiderocol prediction model.&quot;&quot;&quot;</span>
+    <span class="c1"># Load data</span>
+    <span class="n">sidero_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="s2">&quot;1.xlsx&quot;</span><span class="p">)</span>
+    <span class="n">atlas_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="s2">&quot;2.xlsx&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Standardize columns</span>
+    <span class="n">sidero_mapping</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;Cefiderocol&quot;</span><span class="p">:</span> <span class="s2">&quot;cefiderocol_mic&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Meropenem&quot;</span><span class="p">:</span> <span class="s2">&quot;meropenem_mic&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Ciprofloxacin&quot;</span><span class="p">:</span> <span class="s2">&quot;CIPROFLOXACIN_mic&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Colistin&quot;</span><span class="p">:</span> <span class="s2">&quot;colistin_mic&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Organism Name&quot;</span><span class="p">:</span> <span class="s2">&quot;species&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Region&quot;</span><span class="p">:</span> <span class="s2">&quot;region&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Year Collected&quot;</span><span class="p">:</span> <span class="s2">&quot;year&quot;</span>
+    <span class="p">}</span>
+
+    <span class="n">sidero_data</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="n">sidero_mapping</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1"># Clean MIC values</span>
+    <span class="n">mic_columns</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;cefiderocol_mic&quot;</span><span class="p">,</span> <span class="s2">&quot;meropenem_mic&quot;</span><span class="p">,</span> <span class="s2">&quot;CIPROFLOXACIN_mic&quot;</span><span class="p">,</span> <span class="s2">&quot;colistin_mic&quot;</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">mic_columns</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">sidero_data</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="n">sidero_data</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="n">sidero_data</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">clean_mic_values</span><span class="p">)</span>
+            <span class="n">sidero_data</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_numeric</span><span class="p">(</span><span class="n">sidero_data</span><span class="p">[</span><span class="n">col</span><span class="p">],</span> <span class="n">errors</span><span class="o">=</span><span class="s1">&#39;coerce&#39;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">sidero_data</span><span class="p">,</span> <span class="n">atlas_data</span>
+</code></pre></div>
+
+<h4>Step 4.2: Feature Creation</h4>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">create_prediction_features</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create features for cefiderocol prediction model.&quot;&quot;&quot;</span>
+    <span class="c1"># Basic MIC features</span>
+    <span class="n">mic_columns</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;cefiderocol_mic&quot;</span><span class="p">,</span> <span class="s2">&quot;meropenem_mic&quot;</span><span class="p">,</span> <span class="s2">&quot;CIPROFLOXACIN_mic&quot;</span><span class="p">,</span> <span class="s2">&quot;colistin_mic&quot;</span><span class="p">]</span>
+    <span class="n">features_df</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">mic_columns</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+    <span class="c1"># Log transform MIC values</span>
+    <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">mic_columns</span><span class="p">:</span>
+        <span class="n">features_df</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;log_</span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log1p</span><span class="p">(</span><span class="n">features_df</span><span class="p">[</span><span class="n">col</span><span class="p">])</span>
+
+    <span class="c1"># Resistance features</span>
+    <span class="n">resistance_columns</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s2">_resistant&quot;</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">mic_columns</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">resistance_columns</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="n">features_df</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">col</span><span class="p">]</span>
+
+    <span class="c1"># Resistance patterns</span>
+    <span class="n">features_df</span><span class="p">[</span><span class="s2">&quot;total_resistance&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">features_df</span><span class="p">[</span><span class="n">resistance_columns</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">features_df</span><span class="p">[</span><span class="s2">&quot;cefiderocol_only_susceptible&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="p">(</span><span class="n">features_df</span><span class="p">[</span><span class="s2">&quot;cefiderocol_mic_resistant&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> 
+        <span class="p">(</span><span class="n">features_df</span><span class="p">[</span><span class="s2">&quot;total_resistance&quot;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+
+    <span class="c1"># MIC ratios (comparative susceptibility)</span>
+    <span class="n">features_df</span><span class="p">[</span><span class="s2">&quot;meropenem_cefiderocol_ratio&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">features_df</span><span class="p">[</span><span class="s2">&quot;meropenem_mic&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="p">(</span><span class="n">features_df</span><span class="p">[</span><span class="s2">&quot;cefiderocol_mic&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="mf">0.01</span><span class="p">)</span>
+    <span class="n">features_df</span><span class="p">[</span><span class="s2">&quot;ciprofloxacin_cefiderocol_ratio&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">features_df</span><span class="p">[</span><span class="s2">&quot;CIPROFLOXACIN_mic&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="p">(</span><span class="n">features_df</span><span class="p">[</span><span class="s2">&quot;cefiderocol_mic&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="mf">0.01</span><span class="p">)</span>
+    <span class="n">features_df</span><span class="p">[</span><span class="s2">&quot;colistin_cefiderocol_ratio&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">features_df</span><span class="p">[</span><span class="s2">&quot;colistin_mic&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="p">(</span><span class="n">features_df</span><span class="p">[</span><span class="s2">&quot;cefiderocol_mic&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="mf">0.01</span><span class="p">)</span>
+
+    <span class="c1"># Categorical features</span>
+    <span class="n">le_species</span> <span class="o">=</span> <span class="n">LabelEncoder</span><span class="p">()</span>
+    <span class="n">le_region</span> <span class="o">=</span> <span class="n">LabelEncoder</span><span class="p">()</span>
+
+    <span class="n">features_df</span><span class="p">[</span><span class="s2">&quot;species_encoded&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">le_species</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;species&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="s2">&quot;Unknown&quot;</span><span class="p">))</span>
+    <span class="n">features_df</span><span class="p">[</span><span class="s2">&quot;region_encoded&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">le_region</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;region&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="s2">&quot;Unknown&quot;</span><span class="p">))</span>
+    <span class="n">features_df</span><span class="p">[</span><span class="s2">&quot;year&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;year&quot;</span><span class="p">]</span>
+
+    <span class="c1"># Clinical decision features</span>
+    <span class="n">features_df</span><span class="p">[</span><span class="s2">&quot;multidrug_resistant&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">features_df</span><span class="p">[</span><span class="s2">&quot;total_resistance&quot;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+    <span class="n">features_df</span><span class="p">[</span><span class="s2">&quot;extensively_drug_resistant&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">features_df</span><span class="p">[</span><span class="s2">&quot;total_resistance&quot;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">3</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+
+    <span class="c1"># Target</span>
+    <span class="n">target</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;use_cefiderocol&quot;</span><span class="p">]</span>
+
+    <span class="c1"># Remove year column and fill missing values</span>
+    <span class="n">features_df</span> <span class="o">=</span> <span class="n">features_df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s2">&quot;year&quot;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">features_df</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">le_species</span><span class="p">,</span> <span class="n">le_region</span>
+</code></pre></div>
+
+<h4>Step 4.3: Model Training</h4>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">train_prediction_models</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Train multiple models for cefiderocol prediction.&quot;&quot;&quot;</span>
+    <span class="c1"># Standardize features</span>
+    <span class="n">scaler</span> <span class="o">=</span> <span class="n">StandardScaler</span><span class="p">()</span>
+    <span class="n">X_train_scaled</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
+    <span class="n">X_test_scaled</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+
+    <span class="c1"># Models to train</span>
+    <span class="n">models</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;Random Forest&quot;</span><span class="p">:</span> <span class="n">RandomForestClassifier</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">),</span>
+        <span class="s2">&quot;XGBoost&quot;</span><span class="p">:</span> <span class="n">xgb</span><span class="o">.</span><span class="n">XGBClassifier</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span> <span class="n">eval_metric</span><span class="o">=</span><span class="s1">&#39;logloss&#39;</span><span class="p">),</span>
+        <span class="s2">&quot;Gradient Boosting&quot;</span><span class="p">:</span> <span class="n">GradientBoostingClassifier</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">),</span>
+        <span class="s2">&quot;Logistic Regression&quot;</span><span class="p">:</span> <span class="n">LogisticRegression</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+    <span class="p">}</span>
+
+    <span class="n">results</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">model</span> <span class="ow">in</span> <span class="n">models</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="c1"># Train model</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train_scaled</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+
+        <span class="c1"># Predictions</span>
+        <span class="n">y_pred</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test_scaled</span><span class="p">)</span>
+        <span class="n">y_pred_proba</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_test_scaled</span><span class="p">)[:,</span> <span class="mi">1</span><span class="p">]</span>
+
+        <span class="c1"># Metrics</span>
+        <span class="n">auc</span> <span class="o">=</span> <span class="n">roc_auc_score</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred_proba</span><span class="p">)</span>
+        <span class="n">precision</span> <span class="o">=</span> <span class="n">precision_score</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">)</span>
+        <span class="n">recall</span> <span class="o">=</span> <span class="n">recall_score</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">)</span>
+
+        <span class="n">results</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;model&quot;</span><span class="p">:</span> <span class="n">model</span><span class="p">,</span>
+            <span class="s2">&quot;y_pred&quot;</span><span class="p">:</span> <span class="n">y_pred</span><span class="p">,</span>
+            <span class="s2">&quot;y_pred_proba&quot;</span><span class="p">:</span> <span class="n">y_pred_proba</span><span class="p">,</span>
+            <span class="s2">&quot;auc&quot;</span><span class="p">:</span> <span class="n">auc</span><span class="p">,</span>
+            <span class="s2">&quot;precision&quot;</span><span class="p">:</span> <span class="n">precision</span><span class="p">,</span>
+            <span class="s2">&quot;recall&quot;</span><span class="p">:</span> <span class="n">recall</span>
+        <span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">results</span><span class="p">,</span> <span class="n">scaler</span>
+</code></pre></div>
+
+<h3>4.5 Performance Metrics</h3>
+<p><strong>Overall Performance:</strong>
+- <strong>AUC Score</strong>: 1.000
+- <strong>Precision</strong>: 1.000
+- <strong>Recall</strong>: 1.000</p>
+<p><strong>Clinical Performance:</strong>
+- <strong>Sensitivity</strong>: 1.000
+- <strong>Specificity</strong>: 1.000
+- <strong>Positive Predictive Value</strong>: 1.000
+- <strong>Negative Predictive Value</strong>: 1.000</p>
+<h3>4.6 Feature Importance Analysis</h3>
+<p><strong>Top 10 Most Important Features (Random Forest):</strong>
+1. <code>cefiderocol_only_susceptible</code> (importance: 0.267)
+2. <code>total_resistance</code> (importance: 0.239)
+3. <code>CIPROFLOXACIN_mic</code> (importance: 0.091)
+4. <code>colistin_mic_resistant</code> (importance: 0.063)
+5. <code>log_CIPROFLOXACIN_mic</code> (importance: 0.062)
+6. <code>colistin_mic</code> (importance: 0.059)
+7. <code>CIPROFLOXACIN_mic_resistant</code> (importance: 0.046)
+8. <code>log_colistin_mic</code> (importance: 0.045)
+9. <code>ciprofloxacin_cefiderocol_ratio</code> (importance: 0.043)
+10. <code>colistin_cefiderocol_ratio</code> (importance: 0.018)</p>
+<h3>4.7 Clinical Decision Rules</h3>
+<h4>Rule 1: MIC Threshold</h4>
+<ul>
+<li><strong>Use cefiderocol</strong>: MIC &lt; 4 mg/L</li>
+<li><strong>Avoid cefiderocol</strong>: MIC ≥ 4 mg/L</li>
+</ul>
+<h4>Rule 2: Resistance Pattern Analysis</h4>
+<ul>
+<li><strong>Use cefiderocol</strong>: Susceptible + other antibiotics resistant</li>
+<li><strong>Consider cefiderocol</strong>: Multidrug-resistant (≥2 resistant antibiotics)</li>
+</ul>
+<h4>Rule 3: Comparative MIC Analysis</h4>
+<ul>
+<li><strong>Use cefiderocol</strong>: Lower MIC compared to other antibiotics</li>
+<li><strong>Consider cefiderocol</strong>: Meropenem/cefiderocol ratio &gt; 2</li>
+</ul>
+<h4>Rule 4: Epidemiological Factors</h4>
+<ul>
+<li>Consider regional resistance patterns</li>
+<li>Account for species-specific resistance profiles</li>
+</ul>
+<hr />
+<h2>Integration and Clinical Application</h2>
+<h3>Clinical Decision Framework</h3>
+<h4>1. First-Line Treatment (Step 2)</h4>
+<ul>
+<li>Model predicts most effective antibiotic based on species, region, and resistance patterns</li>
+<li>Considers global efficacy data from ATLAS database</li>
+</ul>
+<h4>2. Sequential Alternatives (Step 2)</h4>
+<ul>
+<li>Provides complete sequence of alternatives</li>
+<li>Each subsequent option is less effective but still viable</li>
+<li>Maintains therapeutic options for treatment failure</li>
+</ul>
+<h4>3. Phenotypic Analysis (Step 3)</h4>
+<ul>
+<li>Identifies resistance patterns and clusters</li>
+<li>Provides insights into resistance mechanisms</li>
+<li>Supports personalized treatment approaches</li>
+</ul>
+<h4>4. Last Resort Decision (Step 4)</h4>
+<ul>
+<li>Determines when to use cefiderocol</li>
+<li>Always positioned as final option</li>
+<li>Preserves this critical antibiotic</li>
+</ul>
+<h3>Example Clinical Workflow</h3>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Complete clinical workflow</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">clinical_workflow</span><span class="p">(</span><span class="n">species</span><span class="p">,</span> <span class="n">country</span><span class="p">,</span> <span class="n">year</span><span class="p">,</span> <span class="n">resistance_profile</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Complete clinical workflow for antibiotic recommendation.&quot;&quot;&quot;</span>
+
+    <span class="c1"># Step 2: Get antibiotic sequence</span>
+    <span class="n">recommendations</span> <span class="o">=</span> <span class="n">antibiotic_model</span><span class="o">.</span><span class="n">recommend_antibiotics</span><span class="p">(</span>
+        <span class="n">species</span><span class="o">=</span><span class="n">species</span><span class="p">,</span>
+        <span class="n">country</span><span class="o">=</span><span class="n">country</span><span class="p">,</span>
+        <span class="n">year</span><span class="o">=</span><span class="n">year</span><span class="p">,</span>
+        <span class="n">resistance_profile</span><span class="o">=</span><span class="n">resistance_profile</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Step 3: Analyze phenotypic signatures</span>
+    <span class="n">cluster_analysis</span> <span class="o">=</span> <span class="n">phenotypic_model</span><span class="o">.</span><span class="n">analyze_signatures</span><span class="p">(</span><span class="n">species</span><span class="p">,</span> <span class="n">resistance_profile</span><span class="p">)</span>
+
+    <span class="c1"># Step 4: Determine cefiderocol use</span>
+    <span class="n">cefiderocol_decision</span> <span class="o">=</span> <span class="n">cefiderocol_model</span><span class="o">.</span><span class="n">predict_use</span><span class="p">(</span>
+        <span class="n">species</span><span class="o">=</span><span class="n">species</span><span class="p">,</span>
+        <span class="n">resistance_profile</span><span class="o">=</span><span class="n">resistance_profile</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s1">&#39;antibiotic_sequence&#39;</span><span class="p">:</span> <span class="n">recommendations</span><span class="p">,</span>
+        <span class="s1">&#39;phenotypic_signatures&#39;</span><span class="p">:</span> <span class="n">cluster_analysis</span><span class="p">,</span>
+        <span class="s1">&#39;cefiderocol_recommendation&#39;</span><span class="p">:</span> <span class="n">cefiderocol_decision</span>
+    <span class="p">}</span>
+</code></pre></div>
+
+<hr />
+<h2>Validation and Limitations</h2>
+<h3>Model Validation</h3>
+<h4>Strengths</h4>
+<ol>
+<li><strong>Evidence-based</strong>: Uses global ATLAS data</li>
+<li><strong>Sequential approach</strong>: Provides complete treatment sequence</li>
+<li><strong>Antimicrobial stewardship</strong>: Preserves cefiderocol</li>
+<li><strong>Regional consideration</strong>: Accounts for geographic resistance patterns</li>
+<li><strong>Species-specific</strong>: Tailored to bacterial species</li>
+</ol>
+<h4>Limitations</h4>
+<ol>
+<li><strong>Retrospective data</strong>: Based on historical susceptibility patterns</li>
+<li><strong>Simplified resistance</strong>: Uses binary resistance indicators</li>
+<li><strong>Clinical factors</strong>: Doesn't include patient-specific factors</li>
+<li><strong>Validation needed</strong>: Requires clinical validation before use</li>
+</ol>
+<h3>Critical Considerations</h3>
+<h4>Data Limitations</h4>
+<ul>
+<li>No real treatment failure data available</li>
+<li>Targets based on theoretical resistance patterns</li>
+<li>High performance likely reflects simplified target definitions</li>
+<li>Geographic and temporal biases possible</li>
+</ul>
+<h4>Clinical Implementation</h4>
+<ul>
+<li><strong>Do NOT use for clinical decisions</strong> without validation</li>
+<li><strong>Validate on real treatment failure data</strong></li>
+<li><strong>Include clinical factors</strong> (comorbidities, previous exposure)</li>
+<li><strong>Prospective validation</strong> required before implementation</li>
+<li><strong>Use as research tool</strong> only</li>
+</ul>
+<hr />
+<h2>Future Directions</h2>
+<h3>1. Clinical Integration</h3>
+<ul>
+<li>Include patient factors (age, comorbidities, allergies)</li>
+<li>Add pharmacokinetic considerations</li>
+<li>Integrate with local resistance patterns</li>
+</ul>
+<h3>2. Model Improvements</h3>
+<ul>
+<li>Include genomic resistance markers</li>
+<li>Add temporal resistance trends</li>
+<li>Develop species-specific models</li>
+</ul>
+<h3>3. Clinical Validation</h3>
+<ul>
+<li>Prospective clinical studies</li>
+<li>Real-world implementation</li>
+<li>Outcome assessment</li>
+</ul>
+<h3>4. Broader Applications</h3>
+<ul>
+<li>Extend to other novel antibiotics</li>
+<li>Develop comprehensive antimicrobial decision support systems</li>
+<li>Integrate with precision medicine approaches</li>
+</ul>
+<hr />
+<h2>Summary</h2>
+<p>The Vivli system provides a comprehensive framework for antibiotic decision support through a structured 4-step methodology:</p>
+<ol>
+<li><strong>Data Preparation</strong>: Standardization and exploration of global susceptibility data</li>
+<li><strong>Antibiotic Sequencing</strong>: Evidence-based recommendation of treatment sequences</li>
+<li><strong>Phenotypic Analysis</strong>: Identification of resistance patterns and signatures</li>
+<li><strong>Cefiderocol Optimization</strong>: Targeted use of critical antibiotics</li>
+</ol>
+<p><strong>Key Clinical Value</strong>: 
+- Evidence-based antibiotic sequencing
+- Antimicrobial stewardship compliance
+- Regional resistance pattern consideration
+- Complete treatment pathway provision
+- Phenotypic signature identification
+- Optimized cefiderocol use</p>
+<p>This methodology serves as the foundation for clinical decision support in antibiotic therapy, providing a systematic approach to treatment selection that balances efficacy with antibiotic preservation while supporting precision medicine approaches.</p>
+        
+        <div style="text-align: center; margin-top: 40px; padding: 20px; color: #7f8c8d; border-top: 1px solid #ecf0f1;">
+            <p>This document provides the complete methodology for the Vivli system, covering all steps from data preparation to final clinical implementation.</p>
+        </div>
+    </div>
+</body>
+</html>

@@ -24,7 +24,7 @@ def clean_mic_values(value):
             return pd.NA
     return float(value)
 
-def load_data(sidero_path="sidero-wt.xlsx", atlas_path="atlas.xlsx"):
+def load_data(sidero_path="1.xlsx", atlas_path="2.xlsx"):
     """Charge les fichiers SIDERO-WT et ATLAS."""
     try:
         sidero_data = pd.read_excel(sidero_path)
