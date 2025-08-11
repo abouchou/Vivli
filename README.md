@@ -198,4 +198,4 @@ recommendations = model.recommend_antibiotics(
 
 
 ### Authors
-Adekemi Adepeju, Christian Ako, Abeeb Adeniyi, Oluwatobiloba Kazeem, Oluwadamilare Olatunbosun
+Adekemi Adepeju, Christian Ako, Abeeb Adeniyi, Oluwatobiloba Kazeem, Oluwadamilare Olatunbosun using the Pfizer's ATLAS dataset and Sidero datatset as part of the 2025 Vivli AMR Data Challenge.
