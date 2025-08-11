@@ -93,12 +93,6 @@ python generate_english_antibiotic_report.py
 - **Target**: First antibiotic recommendation
 - **Coverage**: 40+ antibiotics analyzed
 
-### Cefiderocol Prediction
-- **AUC Score**: 1.000
-- **Precision**: 1.000
-- **Recall**: 1.000
-- **Sensitivity**: 1.000
-- **Specificity**: 1.000
 
 ## 🏥 Clinical Applications
 
