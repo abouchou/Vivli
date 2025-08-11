@@ -1,8 +1,8 @@
-# Vivli System - Antibiotic Decision Support Platform
+# Vivli - Anticipating Resistance Risks to Cefiderocol in MDR Pathogens
 
 ## Overview
 
-The Vivli system is a comprehensive antibiotic decision support platform that combines multiple prediction models to provide evidence-based antibiotic recommendations. The system uses machine learning to recommend antibiotics in optimal order of efficacy, with cefiderocol as the last resort option.
+This project combines multiple prediction models to provide evidence-based antibiotic recommendations. The system uses machine learning to recommend antibiotics in optimal order of efficacy, with cefiderocol as the last resort option.
 
 ## 🏗️ Architecture
 
