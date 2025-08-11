@@ -195,21 +195,7 @@ recommendations = model.recommend_antibiotics(
 - Develop comprehensive antimicrobial decision support systems
 - Integrate with precision medicine approaches
 
-## 🤝 Contributing
 
-This is a research project. For contributions or questions:
-1. Review the methodology documentation
-2. Understand the limitations and clinical considerations
-3. Ensure proper validation before clinical use
 
-## 📄 License
-
-This project is for research purposes only. Clinical use requires proper validation and regulatory approval.
-
-## 📞 Contact
-
-For technical support or questions, please refer to the source code and documentation in the `docs/` folder.
-
----
-
-**⚠️ Disclaimer**: This system is designed for research purposes only. Clinical implementation requires comprehensive validation and regulatory approval. The models have critical limitations and should not be used for clinical decisions without proper validation.
+### Authors
+Adekemi Adepeju, Christian Ako, Abeeb Adeniyi, Oluwatobiloba Kazeem, Oluwadamilare Olatunbosun
