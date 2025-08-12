@@ -17,11 +17,13 @@ The system follows a structured 4-step methodology:
 
 ```
 Vivli/
-├── scripts/                    # Python scripts
+├── scripts/                    # Python and R scripts
 │   ├── antibiotic_decision_tree.py
 │   ├── step4_prediction.py
 │   ├── generate_english_antibiotic_report.py
-│   ├── convert_md_to_html.py
+│   ├── convert_md_to_html.py|
+│   ├── multiple_regression_plot.R
+│   ├── univariate_analysis_script.R
 │   └── ...
 ├── docs/                       # Documentation
 │   ├── vivli_complete_methodology.md
