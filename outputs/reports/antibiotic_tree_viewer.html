@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Decision Tree - Antibiotic Recommendation</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+        .description {
+            background-color: #ecf0f1;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            border-left: 4px solid #3498db;
+        }
+        .image-container {
+            text-align: center;
+            margin: 30px 0;
+        }
+        .tree-image {
+            max-width: 100%;
+            height: auto;
+            border: 2px solid #bdc3c7;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .legend {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 30px;
+        }
+        .legend h3 {
+            color: #2c3e50;
+            margin-top: 0;
+        }
+        .legend ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        .legend li {
+            padding: 8px 0;
+            border-bottom: 1px solid #ecf0f1;
+        }
+        .legend li:last-child {
+            border-bottom: none;
+        }
+        .status {
+            background-color: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border: 1px solid #c3e6cb;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🌳 Decision Tree for Antibiotic Recommendation</h1>
+        
+        <div class="status">
+            ✅ <strong>Image generated successfully!</strong> The decision tree has been created with simulated data to demonstrate the recommendation system.
+        </div>
+        
+        <div class="description">
+            <h3>📋 System Description</h3>
+            <p>This decision tree uses the following characteristics to recommend the most appropriate antibiotic:</p>
+            <ul>
+                <li><strong>Bacterial species</strong> : Type of identified bacterium</li>
+                <li><strong>Country/Region</strong> : Geographic location (influences resistance profiles)</li>
+                <li><strong>Year</strong> : Temporal evolution of resistances</li>
+                <li><strong>Resistance profile</strong> : Level of resistance by antibiotic class</li>
+            </ul>
+        </div>
+        
+        <div class="image-container">
+            <img src="plots/antibiotic_decision_tree.png" alt="Antibiotic Decision Tree" class="tree-image">
+        </div>
+        
+        <div class="legend">
+            <h3>🎯 Recommendation Classes</h3>
+            <ul>
+                <li><strong>Carbapenems</strong> : First-line antibiotics for sensitive infections</li>
+                <li><strong>Cephalosporins</strong> : Alternative to carbapenems</li>
+                <li><strong>Aminoglycosides</strong> : For moderate resistance cases</li>
+                <li><strong>Cefiderocol</strong> : Last resort antibiotic for multiple resistances</li>
+            </ul>
+            
+            <h3>📊 Interpretation</h3>
+            <p>The decision tree takes into account the combination of all factors to determine the most appropriate antibiotic class. The higher the resistance level, the more powerful the recommended antibiotic will be.</p>
+        </div>
+        
+        <div class="description">
+            <h3>⚠️ Important Note</h3>
+            <p>This model is based on simulated data for demonstration purposes. In a real clinical context, recommendations should always be validated by a healthcare professional and adapted to the specific patient case.</p>
+        </div>
+    </div>
+</body>
+</html>
